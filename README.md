@@ -8,7 +8,7 @@ Also see this on the [ADC Outreach and Training google calender](https://calenda
 * [48th International Arctic Workshop](http://instaar.colorado.edu/meetings/AW2018/about/index.html)  
 April 5 - 6, 2018  
 Boulder, CO  
-[See issue #3](https://github.com/vlraymond/arctic-data-outreach/issues/3)  
+[See issue #3]()  
 
 
 
@@ -16,7 +16,7 @@ Boulder, CO
 June 19, 21, 22 2018, 12:30 - 2pm  
 Room A Schwarzhorn   
 Davos, Switzerland   
-[See issue #1](https://github.com/vlraymond/arctic-data-outreach/issues/1)  
+[See issue #1](https://github.com/NCEAS/arctic-data-outreach/issues/1)  
 
 * ESA
 August 5 - 10  
@@ -36,7 +36,7 @@ Washington, D.C.
 February 12 - 16, February 26 - Mar 3 (respectively)  
 online  
 Planned Activity: Online campaign via twitter  
-[See issue #5](https://github.com/vlraymond/arctic-data-outreach/issues/5)
+[See issue #5]()
 
 NOAA EDM Workshop 
 April 23 - 24, 2018  
@@ -49,7 +49,8 @@ Washington, D.C.
 Planned Activity: Booth at AGU  
 
 ### ADC representatives will also be attending the following events:
-Alaska Forum for Environment, ESA, ESIP Winter & Summer Meetings, SASAP trainings, DataOne All Hands Meeting, 
+Alaska Forum for Environment, ESA, ESIP Winter & Summer Meetings, SASAP trainings, DataOne All Hands Meeting,   
+
 ### Cancelled activities:
 
 
