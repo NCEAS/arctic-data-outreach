@@ -8,9 +8,7 @@ Also see this on the [ADC Outreach and Training google calender](https://calenda
 * [48th International Arctic Workshop](http://instaar.colorado.edu/meetings/AW2018/about/index.html)  
 April 5 - 6, 2018  
 Boulder, CO  
-[See issue #3]()  
-
-
+[See issue #2](https://github.com/NCEAS/arctic-data-outreach/issues/2)  
 
 * [POLAR2018](https://www.polar2018.org/)  
 June 19, 21, 22 2018, 12:30 - 2pm  
@@ -24,7 +22,7 @@ New Orleans, LA
 Planned Activity: Workshop   
 
 * NCEAS Training #1  
-August 13 - 17
+Tentative: August 13 - 17
 Santa Barbara, CA  
 
 * [AGU Fall Meeting 2018](https://fallmeeting.agu.org/2017/future-meetings/)  
