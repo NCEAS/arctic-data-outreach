@@ -34,7 +34,7 @@ Washington, D.C.
 February 12 - 16, February 26 - Mar 3 (respectively)  
 online  
 Planned Activity: Online campaign via twitter  
-[See issue #5]()
+[See issue #3](https://github.com/NCEAS/arctic-data-outreach/issues/3)
 
 NOAA EDM Workshop 
 April 23 - 24, 2018  
