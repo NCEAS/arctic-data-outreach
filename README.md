@@ -39,7 +39,7 @@ Planned Activity: Online campaign via twitter
 NOAA EDM Workshop 
 April 23 - 24, 2018  
 Silver Springs, MD   
-(NB, as of 1/22/18 activity halted due to government shutdown)  
+Planned Activity: Attend in support of Sheekelah
 
 * [AGU Fall Meeting 2018](https://fallmeeting.agu.org/2017/future-meetings/)  
 December 10 - 14, 2018  
