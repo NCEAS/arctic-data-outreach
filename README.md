@@ -20,8 +20,8 @@ Planned Activity: Three 1.5hr-long workshops
 * ESA
 August 5 - 10  
 New Orleans, LA  
-Planned Activity: "Inspire session "Skills and Knowledge for Data-intensive Ecological Research across the Data Lifecycle"
-See issue #20
+Planned Activity: "Inspire session "Skills and Knowledge for Data-intensive Ecological Research across the Data Lifecycle"  
+[See issue #20]  
 
 * NCEAS Training #1  
 Tentative: August 13 - 17
