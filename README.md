@@ -14,12 +14,14 @@ Boulder, CO
 June 19, 21, 22 2018, 12:30 - 2pm  
 Room A Schwarzhorn   
 Davos, Switzerland   
+Planned Activity: Three 1.5hr-long workshops
 [See issue #1](https://github.com/NCEAS/arctic-data-outreach/issues/1)  
 
 * ESA
 August 5 - 10  
 New Orleans, LA  
-Planned Activity: Workshop   
+Planned Activity: "Inspire session "Skills and Knowledge for Data-intensive Ecological Research across the Data Lifecycle"
+See issue #20
 
 * NCEAS Training #1  
 Tentative: August 13 - 17
