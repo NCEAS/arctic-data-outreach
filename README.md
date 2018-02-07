@@ -21,6 +21,7 @@ Planned Activity: Three 1.5hr-long workshops
 August 5 - 10  
 New Orleans, LA  
 Planned Activity: "Inspire session "Skills and Knowledge for Data-intensive Ecological Research across the Data Lifecycle"  
+Planned Activity #2: 5 hr workshop / training event (based on DataOne trainings)
 [See issue #20]  
 
 * NCEAS Training #1  
