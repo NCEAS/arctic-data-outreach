@@ -50,7 +50,7 @@ Washington, D.C.
 Planned Activity: Booth at AGU  
 
 ### ADC representatives will also be attending the following events:
-Alaska Forum for Environment, ESA, ESIP Winter & Summer Meetings, SASAP trainings, DataOne All Hands Meeting,   
+ESIP Winter & Summer Meetings, SASAP trainings, DataOne All Hands Meeting,   
 
 ### Cancelled activities:
 
