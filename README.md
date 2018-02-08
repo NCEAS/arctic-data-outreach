@@ -33,8 +33,8 @@ December 10 - 14, 2018
 Washington, D.C.  
 
 ### 2018 Arctic Data Center Outreach
-* [Love Data Week](http://lovedataweek.org/2018-home/) & [Endangered Data Week](http://endangereddataweek.org/)  
-February 12 - 16, February 26 - Mar 3 (respectively)  
+* [Love Data Week](http://lovedataweek.org/2018-home/) 
+February 12 - 16  
 online  
 Planned Activity: Online campaign via twitter  
 [See issue #3](https://github.com/NCEAS/arctic-data-outreach/issues/3)
@@ -42,7 +42,7 @@ Planned Activity: Online campaign via twitter
 NOAA EDM Workshop 
 April 23 - 24, 2018  
 Silver Springs, MD   
-Planned Activity: Attend in support of Sheekelah
+Planned Activity: VR to attend in support of Sheekelah
 
 * [AGU Fall Meeting 2018](https://fallmeeting.agu.org/2017/future-meetings/)  
 December 10 - 14, 2018  
