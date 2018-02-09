@@ -39,7 +39,7 @@ online
 Planned Activity: Online campaign via twitter  
 [See issue #3](https://github.com/NCEAS/arctic-data-outreach/issues/3)
 
-NOAA EDM Workshop 
+* [NOAA EDM Workshop](https://edmw2018.sched.com/) 
 April 23 - 24, 2018  
 Silver Springs, MD   
 Planned Activity: VR to attend in support of Sheekela
