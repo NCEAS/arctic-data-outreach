@@ -42,7 +42,8 @@ Planned Activity: Online campaign via twitter
 NOAA EDM Workshop 
 April 23 - 24, 2018  
 Silver Springs, MD   
-Planned Activity: VR to attend in support of Sheekelah
+Planned Activity: VR to attend in support of Sheekela
+[See issue #18](https://github.com/NCEAS/arctic-data-outreach/issues/18)
 
 * [AGU Fall Meeting 2018](https://fallmeeting.agu.org/2017/future-meetings/)  
 December 10 - 14, 2018  
