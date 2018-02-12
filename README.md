@@ -21,8 +21,8 @@ Planned Activity: Three 1.5hr-long workshops
 August 5 - 10  
 New Orleans, LA  
 Planned Activity: "Inspire session "Skills and Knowledge for Data-intensive Ecological Research across the Data Lifecycle"  
-Planned Activity #2: 5 hr workshop / training event (based on DataOne trainings)
-[See issue #20]  
+Planned Activity #2: 5 hr workshop / training event (based on DataOne trainings)    
+[See issue #20](https://github.com/NCEAS/arctic-data-outreach/issues/20)   
 
 * NCEAS Training #1  
 Tentative: August 13 - 17
@@ -42,8 +42,8 @@ Planned Activity: Online campaign via twitter
 * [NOAA EDM Workshop](https://edmw2018.sched.com/) 
 April 23 - 24, 2018  
 Silver Springs, MD   
-Planned Activity: VR to attend in support of Sheekela
-[See issue #18](https://github.com/NCEAS/arctic-data-outreach/issues/18)
+Planned Activity: VR to attend in support of Sheekela  
+[See issue #18](https://github.com/NCEAS/arctic-data-outreach/issues/18)  
 
 * [AGU Fall Meeting 2018](https://fallmeeting.agu.org/2017/future-meetings/)  
 December 10 - 14, 2018  
