@@ -5,7 +5,7 @@ Repo for coordination, planning, and logistics of Arctic Data Center outreach an
 Also see this on the [ADC Outreach and Training google calender](https://calendar.google.com/calendar/embed?src=nceas.ucsb.edu_q8ada07hlliumm1ejcugpo89m8%40group.calendar.google.com&ctz=America%2FLos_Angeles)
 
 ### 2018 Arctic Data Center Trainings
-* [45th Alaska Anthropological Association annual meeting]
+* [45th Alaska Anthropological Association annual meeting](https://www.alaskaanthropology.org/annual-meeting/)
 March 21 - 24, 2018
 Anchorage, AK
 [See issue #26](https://github.com/NCEAS/arctic-data-outreach/issues/26)
