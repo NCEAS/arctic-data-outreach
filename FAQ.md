@@ -1,5 +1,20 @@
 This draft FAQ is geared at user support. It should be made publicly available on the arcticdata.io site. It is made from actual support tickets, using real questions and real answers.
 
+
+
+# Table of Contents
+1. [ACADIS legacy accounts and formats](#acadis-legacy-accounts-and-formats)
+2. [DOIs](#dois)
+3. [Citations and Credit](#citations-and-credit)
+4. [ORCID](#orcid)
+5. [Granting Access to collaborators](#granting-access-to-collaborators)
+6. [Making Datasets Private and Public](#making-datasets-private-and-public)
+7. [File Formats](#file-formats)
+8. [Attribute Units](#attribute-units)
+9. [Data Abstracts](#data-abstracts)
+10. [Methods](#methods)
+11. [Metadata](#metadata)
+
 # ACADIS legacy accounts and formats
 ### Q: I have data under an ACADIS account that I need linked to my new ORCID account . 
 A: We can definitely help link your ACADIS and ORCID accounts. If you have previously submitted data we can get those linked to your ORCID profile.  
@@ -97,8 +112,8 @@ A: Since your scripts are a form of cyber infrastructure, it is important that w
 ### Q: I cannot find an appropriate unit to describe my attribute.  
 A: Believe us, this has happened before. It's very hard to have an exhaustive list that isn't plain exhausting to look through. We recommend you either reach out to our Data Support team (support@arcticdata.io) to work on a custom unit, or, if you think it's appropriate, you can set your unit as "Other - dimensionless". This works well for counts, percents, concentrations, for example.  
 
-# Abstract
-### Q: Does the Arctic Data Center have any guidance for writing my abstract?  
+# Data Abstracts
+### Q: Does the Arctic Data Center have any guidance for writing my dataset abstract?  
 A: We suggest that the abstract be sufficiently descriptive for a general scientific audience. It should provide an overview of the scientific context/ project/ hypotheses, how this data set fits into the larger project, a synopsis of the experimental or sampling design, and a summary of the data contents. If you prefer and it is appropriate, you could add language from the abstract in your NSF Award.  
 
 # Methods
