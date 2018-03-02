@@ -22,10 +22,11 @@ Planned Activity #1: "Inspire session "Skills and Knowledge for Data-intensive E
 Planned Activity #2: 5 hr workshop / training event (based on DataOne trainings)    
 
 * NCEAS Training  
-August 13 - 17
+August 13 - 17  
 Santa Barbara, CA  
-Planned Activity: 4 day workshop
-[See issue #27](https://github.com/NCEAS/arctic-data-outreach/issues/27)
+Planned Activity: 4 day workshop  
+[See issue #27 for logistics](https://github.com/NCEAS/arctic-data-outreach/issues/27)  
+[Issue #28 for applicant process](https://github.com/NCEAS/arctic-data-outreach/issues/28)  
 
 * [AGU Fall Meeting 2018](https://fallmeeting.agu.org/2017/future-meetings/)  
 December 10 - 14, 2018  
