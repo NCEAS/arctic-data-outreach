@@ -14,7 +14,7 @@ Davos, Switzerland
 Planned Activity: Three 1.5hr-long workshops
 [See issue #1](https://github.com/NCEAS/arctic-data-outreach/issues/1)  
 
-* ESA
+* [ESA](https://esa.org/neworleans/)
 August 5 - 10  
 New Orleans, LA  
 Planned Activity #1: "Inspire session "Skills and Knowledge for Data-intensive Ecological Research across the Data Lifecycle"   
