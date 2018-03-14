@@ -21,7 +21,7 @@ Planned Activity #1: "Inspire session "Skills and Knowledge for Data-intensive E
 [See issue #20](https://github.com/NCEAS/arctic-data-outreach/issues/20)  
 Planned Activity #2: 5 hr workshop / training event (based on DataOne trainings)    
 
-* NCEAS Training  
+* [ADC Data Science Training](http://training.arcticdata.io/agenda-2018-08.html)  
 August 13 - 17  
 Santa Barbara, CA  
 Planned Activity: 4 day workshop  
@@ -68,6 +68,4 @@ ESIP Winter & Summer Meetings, SASAP trainings, DataOne All Hands Meeting,
 
 ## Working Document links
 * [Arctic Data Center conference planning spreadsheet (2018)](https://docs.google.com/spreadsheets/d/1OiSIzkVsPvorFo9G_ZFqf7EVdYY0vDKd7o9S4_O0XGs/edit?pli=1#gid=812369282)
-* [Arctic Data Center Y3 Outreach strategy DRAFT](https://docs.google.com/document/d/18DBMiEWfOATpNETbtMEqqwFyk0jYIK79PBukRXgb1uI/edit#heading=h.ttlawgu1idk)
-* [NSF OPP Arctic Awards (pulled 12/17/18)](https://docs.google.com/spreadsheets/d/1tuhOG2eDac_xQW2QdW0fqQxYiEl88g4WewEH-3ioHDw/edit#gid=307992913)
-* [Email templates - PIs](https://docs.google.com/document/d/1ZsOn36ScsMTbJYO2hfSyOIJZKWWRihDZR1-75wcxXCQ/edit#)
+
