@@ -21,7 +21,7 @@ Planned Activity #1: "Inspire session "Skills and Knowledge for Data-intensive E
 [See issue #20](https://github.com/NCEAS/arctic-data-outreach/issues/20)  
 Planned Activity #2: 5 hr workshop / training event (based on DataOne trainings)    
 
-* [ADC Data Science Training](http://training.arcticdata.io/agenda-2018-08.html)  
+* [ADC Data Science Training](https://arcticdata.io/2018-data-science-training-for-arctic-researchers/)  
 August 13 - 17  
 Santa Barbara, CA  
 Planned Activity: 4 day workshop  
