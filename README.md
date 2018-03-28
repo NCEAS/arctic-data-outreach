@@ -31,6 +31,7 @@ Planned Activity: 4 day workshop
 * [AGU Fall Meeting 2018](https://fallmeeting.agu.org/2017/future-meetings/)  
 December 10 - 14, 2018  
 Washington, D.C.  
+[see issue #31 for pre-planning activities](https://github.com/NCEAS/arctic-data-outreach/issues/31)
 
 ### 2018 Arctic Data Center Outreach
 * [Love Data Week](http://lovedataweek.org/2018-home/) 
