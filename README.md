@@ -55,6 +55,12 @@ Silver Springs, MD
 Planned Activity: VR to attend in support of Sheekela  
 [See issue #18](https://github.com/NCEAS/arctic-data-outreach/issues/18)  
 
+* [APECS International Online Conference](https://www.apecs.is/events/upcoming-event-highlights/apecs-online-conference-2018.html)
+May 13, 2018  
+Online  
+Planned activity: VR to present
+[See issue #39](https://github.com/NCEAS/arctic-data-outreach/issues/39)
+
 * [AGU Fall Meeting 2018](https://fallmeeting.agu.org/2017/future-meetings/)  
 December 10 - 14, 2018  
 Washington, D.C.  
