@@ -140,13 +140,13 @@ Models with extensive outputs are a case where data package sizes can become sub
 
 The Arctic Data Center [ORCID iDs](https://orcid.org/) to identify individuals associated with each data package. When submitting to the Arctic Data Center, an ORCiD is required for the submitter of each data package. ORCiDs are not required for all associated parties (contacts, additional creators, etc.), but are strongly encouraged, especially for the primary creator, so that proper identification and attribution can be given. Additionally, access to edit each data package can only be granted to individuals using ORCiDs. Therefore, it is advised that a plan to [register](https://orcid.org/register/) and record ORCID iDs for each individual involved with the project be created during the initial stages of project development (i.e. within the data management plan of the project proposal).
 
-## Licensing and Data Distribution
+### Licensing and Data Distribution
 
 [![Creative Commons License](https://i.creativecommons.org/l/by/4.0/88x31.png)](http://creativecommons.org/licenses/by/4.0/)[![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)](http://creativecommons.org/publicdomain/zero/1.0/)
 
 All data and metadata will be released under either the [CC-0 Public Domain Dedication](http://creativecommons.org/publicdomain/zero/1.0/) or the [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/), with the potential exception of social science data that have certain sensitivities related to privacy or confidentiality. In cases where legal (e.g., contractual) or ethical (e.g., human subjects) restrictions to data sharing exist, requests to restrict data publication must be requested in advance and in writing and are subject to the approval of the NSF, who will ensure compliance with all federal, university, and Institutional Review Board policies on the use of restricted data. As a repository dedicated to helping researchers increase collaboration and the pace of science, this repository needs certain rights to copy, store, and redistribute data and metadata. By uploading data, metadata, and any other content to the Arctic Data Center, users warrant that they own any rights to the content and are authorized to do so under copyright or any other right that might pertain to the content. [Data and facts themselves are not covered under copyright](http://www.bitlaw.com/copyright/database.html) in the US and most countries, since facts in and of themselves are not eligible for copyright. That said, some associated metadata and some particular compilations of data could potentially be covered by copyright in some jurisdictions. **By uploading content, users grant the Arctic Data Center repository and UCSB all rights needed to copy, store, redistribute, and share data, metadata, and any other content. By marking content as publicly available, users grant the Arctic Data Center repository, UCSB, and any other users the right to copy the content and redistribute it to the public without restriction under the terms of the [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/) license or the [CC-0 Public Domain Dedication](http://creativecommons.org/publicdomain/zero/1.0/), depending on which users choose at the time of upload.**
 
-## Publication
+### Publication
 
 The Arctic Data Center provides a long-lived and publicly accessible system that is free for other researchers to obtain data and metadata files. Complete submissions to the Center meet [the requirements set by The Office of Polar Programs](https://www.nsf.gov/pubs/2016/nsf16055/nsf16055.jsp) which require that metadata files, full datasets, and derived data products be deposited in a long-lived and publicly accessible archive. 
 
@@ -162,7 +162,7 @@ Each data package DOI represents a unique, immutable version, just like for a jo
 
 [Learn more about DOIs](http://www.doi.org/driven_by_doi/DOI_Marketing_Brochure.pdf)
 
-## Submission Tools
+### Submission Tools
 ![The Arctic Data Center simple online submission form.](https://arcticdata.io/wp-content/uploads/registry-screenshot.png)</br>
 Most researchers submit to the Arctic Data Center through the [Arctic Data Center website](https://arcticdata.io/catalog/#share). However, there are several alternative tools to submit data packages to the Center.
 
