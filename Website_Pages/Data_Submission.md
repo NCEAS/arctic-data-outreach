@@ -6,32 +6,28 @@ output:
 ---
 # Data Submission Guidelines
 
-[Introduction](#introduction)<br/>
-[What is a Data Package?](#what-is-a-data-package)<br/>
-[Who Must Submit?](#who-must-submit)<br/>
-[File Organization Guidelines](#file-organization-guidelines)<br/>
-[File Format Guidelines](#file-format-guidelines)<br/>
-[Metadata Guidelines](#metadata-guidelines)<br/>
-[Submission Guidelines for Large Data Packages](#submission-guidelines-for-large-data-packages)<br/>
-[Identification Guidelines](#identification-guidelines)<br/>
-[Licensing and Data Distribution](#licensing-and-data-distribution)<br/>
-[Publication](#publication)<br/>
-[Submission Tools](#submission-tools)<br/>
-[Submission Support](#submission-support)<br/>
+- [Introduction](#introduction)
+    - [Who Must Submit?](#who-must-submit)
+- [Organizing Your Data](#organizing-your-data)
+    - [What is a Data Package?](#what-is-a-data-package)
+    - [File Organization Guidelines](#file-organization-guidelines)
+    - [File Format Guidelines](#file-format-guidelines)
+    - [Metadata Guidelines](#metadata-guidelines)
+    - [Guidelines for Large Data Packages](#guidelines-for-large-data-packages)
+- [The Submission Process](#the-submission-process)
+    - [Identification Guidelines](#identification-guidelines)
+    - [Licensing and Data Distribution](#licensing-and-data-distribution)
+    - [Publication](#publication)
+    - [Submission Tools](#submission-tools)
+- [Submission Support](#submission-support)
 
 ## Introduction
 
-With few exceptions, the NSF Office of Polar Programs requires that metadata, full datasets, and derived data products be deposited in a long-lived and publicly accessible archive. Specific requirements for various Office of Polar Programs programs can be found [here](https://www.nsf.gov/pubs/2016/nsf16055/nsf16055.jsp). The Arctic Data Center at http://arcticdata.io was created with funding from NSF to assist with compliance of these requirements by providing a long-lived and publicly accessible archive for Arctic Sciences Section (ARC) data and metadata. At a minimum, metadata describing ARC-supported data packages must be submitted to the Arctic Data Center. 
+The NSF Office of Polar Programs requires that metadata, full datasets, and derived data products be deposited in a long-lived and publicly accessible archive. Specific requirements for various Office of Polar Programs programs can be found in the [NSF Dear Colleague Letter #16055](https://www.nsf.gov/pubs/2016/nsf16055/nsf16055.jsp). The Arctic Data Center at http://arcticdata.io was created with funding from NSF to assist with compliance of these requirements by providing a long-lived and publicly accessible archive for Arctic Sciences Section (ARC) data and metadata. At a minimum, metadata describing ARC-supported data packages must be submitted to the Arctic Data Center. 
 
 The following documentation provides guidelines to assist with submission of [data packages](#what-is-a-data-package) to the Arctic Data Center. If you have additional questions please see the [Q and A](https://arcticdata.io/q-and-a/) section of the Center's website, or contact support@arcticdata.io and a member of the Arctic Data Center support team will respond promptly.
 
-## What is a Data Package?
-
-The Arctic Data Center primarily archives data packages. Data packages on the Arctic Data Center are simply defined as a collection of related data and metadata files. On the Arctic Data Center, each data package should contain, when possible, all of the relevant data and metadata from a specific research project (or sub-project/project component).
-
-Depending on the size of a research project, multiple data packages may be associated with a single research project. For example, if a research project consists of field sampling at several distinct sites or over several distinct sampling seasons, each site/season may have its own unique data package. When submitting to the Arctic Data Center, it is up to the best judgement of the submitting researcher how his/her research should be grouped. If it is determined that multiple data packages are desirable for a research project, multiple data packages can be made by separately going through the [Arctic Data Center website submission tool](https://arcticdata.io/catalog/#share) for each subset. Furthermore, after submitting multiple data packages, the support team (support@arcticdata.io) can help nest related data packages together. See [here](https://arcticdata.io/catalog/#view/urn:uuid:46789d94-7c12-4d9f-9e62-7f90f7918219) for an example of how nested data packages render on the website.
-
-## Who Must Submit?
+### Who Must Submit?
 
 Data from ARC-supported scientific research should be deposited in [long-lived and publicly-available archives](/preservation) appropriate for the specific type of data collected (by default, the NSF supported [Arctic Data Center](/) at [http://arcticdata.io](http://arcticdata.io), or others where appropriate). Metadata for projects, regardless of where they are archived, should be submitted to this Arctic Data Center for centralized access and discoverability.
 
@@ -55,7 +51,15 @@ For sensitive social science data:
 
 Please write to [support@arcticdata.io](mailto:support@arcticdata.io) with any questions or for clarifications, and we will help to clarify these policies to the best of our ability. Ultimately, NSF makes the final policy decisions on these data submissions.
 
-## File Organization Guidelines
+## Organizing Your Data
+
+### What is a Data Package?
+
+The Arctic Data Center primarily archives data packages. Data packages on the Arctic Data Center are simply defined as a collection of related data and metadata files. On the Arctic Data Center, each data package should contain, when possible, all of the relevant data and metadata from a specific research project (or sub-project/project component).
+
+Depending on the size of a research project, multiple data packages may be associated with a single research project. For example, if a research project consists of field sampling at several distinct sites or over several distinct sampling seasons, each site/season may have its own unique data package. When submitting to the Arctic Data Center, it is up to the best judgement of the submitting researcher how his/her research should be grouped. If it is determined that multiple data packages are desirable for a research project, multiple data packages can be made by separately going through the [Arctic Data Center website submission tool](https://arcticdata.io/catalog/#share) for each subset. Furthermore, after submitting multiple data packages, the support team (support@arcticdata.io) can help nest related data packages together. See [here](https://arcticdata.io/catalog/#view/urn:uuid:46789d94-7c12-4d9f-9e62-7f90f7918219) for an example of how nested data packages render on the website.
+
+### File Organization Guidelines
 
 In order to optimally document and share a project's output, quality data file management is necessary. Some resources for best practices for managing data files can be found [here](https://www.dataone.org/best-practices) and [here](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/0012-9623-90.2.205). The following are a few guidelines that are encouraged for file organization for projects that plan to submit to the Arctic Data Center. Following these guidelines should help ensure a project's outputs are easy to access and understand.
 
@@ -66,7 +70,7 @@ should be used in file names. Always avoid using spaces and specialized ASCII ch
 - Tabular data should be submitted in a long (versus wide) format if possible. Long file formats will make documentation of attributes (variables), as well as access to the data, much easier.
 - For models/scripts, all files necessary to run the code should be included and organized in a manner that makes running the code as accessible as possible. If outside dependencies (software, hardware, or otherwise) are needed to run code which cannot be submitted to the Arctic Data Center, details of these dependencies should be made clear within the metadata description of the code files as well as within the method's metadata. For large models see [Guidelines for Large Models](#guidelines-for-large-models).
 
-## File Format Guidelines
+### File Format Guidelines
 
 The Arctic Data Center primarily supports and encourages the upload of open-source, ubiquitous, and easy-to-read file formats. Examples of such formats are Comma Separated Values (CSV) files, text (TXT) files, PNG, JPEG or TIFF image files, R or Python scripts, and NetCDF files, among many others.
 For projects that plan to submit to the Arctic Data Center, it is strongly advised to incorporate plans for creating open-source files from the initial stages of project development (i.e. within the data management plan of the project proposal). If work with any proprietary data formats such as Excel workbooks or MATLAB files is deemed necessary, plans should be made early on to transform all data stored in these formats into open-source formats before submission to the Arctic Data Center. If for any reason it is determined that certain files created in a project must be submitted in a proprietary format, the Center may request an explanation before publishing the files.
@@ -77,7 +81,7 @@ For projects that plan to submit to the Arctic Data Center, it is strongly advis
 - For MATLAB or other matrix-based programs, it is advised to use NetCDF (an open binary format).
 - NetCDF is also encouraged for many files due to the ability to organize and document files in such a format. See [here](https://www.unidata.ucar.edu/software/netcdf/docs/index.html) for more information about NetCDF files.
 
-## Metadata Guidelines
+### Metadata Guidelines
 
 The Arctic Data Center primarily stores metadata using the [Ecological Metadata Language (EML)](https://knb.ecoinformatics.org/#external//emlparser/docs/eml-2.1.1/index.html). Transformation of plain text metadata documentation into an EML format for archiving will be done automatically when submitting through the [Arctic Data Center website](https://arcticdata.io/catalog/#share). It is advised for projects that plan to submit to the Arctic Data Center that complete, plain text metadata records be readily available before submission. Accordingly, plans to create and store metadata records should be made during the initial stages of project development (i.e. within the data management plan of the project proposal).
 
@@ -98,7 +102,7 @@ The goal of metadata is to document a project's output so that a reasonable scie
 
 Additional guidance for specific metadata cases is included below.
 
-### Metadata Guidelines for Tabular Data
+#### Metadata Guidelines for Tabular Data
 
 For data packages with tabular data (e.g. CSV files), submitted metadata should contain the following components for **every** attribute (attributes may also be known as variables and in tabular data are arranged in either columns or rows). Note, storage of data in a long versus wide format will allow for more succinct metadata (see [File Organization Guidelines](#file-organization-guidelines). Also, please note that tabular data stored within structured formats such as zip, NetCDF, or ESRI spatial files should also comply with these guidelines. 
 
@@ -109,7 +113,7 @@ For data packages with tabular data (e.g. CSV files), submitted metadata should 
 - For all date-time data, a date-time format is needed (e.g. "YYYY-MM-DD").
 - For text data, full descriptions for all patterns/codes are needed if the text is constrained to a list of patterns or codes (e.g. a phone number would be constrained to a certain pattern and abbreviations for site locations may be constrained to a list of codes). 
 
-### Metadata Guidelines for Software
+#### Metadata Guidelines for Software
 
 For data packages with software (including models), submitted metadata should contain the following components, among others:
 
