@@ -126,7 +126,7 @@ For data packages with software (including models), submitted metadata should co
 - Any mathematical/physical explanations needed to understand models.
 - Any methods used to evaluate models.
 
-## Submission Guidelines for Large Data Packages
+## Guidelines for Large Data Packages
 
 The Arctic Data Center does not have data package or file size limitations for NSF funded projects. Many multi-terabyte data packages have been archived on the Arctic Data Center. In most cases, all data and metadata relevant to each project should be archived regardless of total file size (note, non-NSF funded projects may be subject to a one-time processing fee depending on the total data package size). The [Arctic Data Center website](https://arcticdata.io/catalog/#share) can handle the upload of multiple large files simultaneously. However, researchers with slow internet connections or those that experience any trouble uploading any file through the website should contact the Arctic Data Center support team at support@arcticdata.io. The Arctic Data Center support team has many options to upload large data packages when connection speed is limited or files are exceptionally large.
  
@@ -134,9 +134,11 @@ The Arctic Data Center does not have data package or file size limitations for N
 
 Models with extensive outputs are a case where data package sizes can become substantially large. In general, it is advised to archive the model output if it is relevant to the project. That being stated, sometimes model output can be regenerated from archived input data and model code. Accordingly, depending on the specifics of a project, it may be reasonable to archive only the code and model inputs as well as a clear workflow on how to recompute the model output (rather than the output itself).  However, if re-running the model would require prohibitive amounts of compute cycles or other resources (such as access to specialized or expensive software or hardware), then it is still recommended to archive the output especially if the output is a valuable data package that others may want to analyze and use in their own work. For example, many climate model outputs are difficult for the average scientist to recompute but are valuable for a myriad of downstream uses. Additionally, some models are stochastic and the interpretation of subsequent products depends on specific model runs. In these (and most related cases) archival of model outputs is recommended.
 
-## Identification Guidelines
+## The Submission Process
 
-The Arctic Data Center utilizes [ORCID iDs](https://orcid.org/) to identify individuals associated with each data package. When submitting to the Arctic Data Center, an ORCiD is required for the submitter of each data package. ORCiDs are not required for all associated parties (contacts, additional creators, etc.), but are strongly encouraged, especially for the primary creator, so that proper identification and attribution can be given. Additionally, access to edit each data package can only be granted to individuals using ORCiDs. Therefore, it is advised that a plan to [register](https://orcid.org/register/) and record ORCID iDs for each individual involved with the project be created during the initial stages of project development (i.e. within the data management plan of the project proposal).
+### Identification Guidelines
+
+The Arctic Data Center [ORCID iDs](https://orcid.org/) to identify individuals associated with each data package. When submitting to the Arctic Data Center, an ORCiD is required for the submitter of each data package. ORCiDs are not required for all associated parties (contacts, additional creators, etc.), but are strongly encouraged, especially for the primary creator, so that proper identification and attribution can be given. Additionally, access to edit each data package can only be granted to individuals using ORCiDs. Therefore, it is advised that a plan to [register](https://orcid.org/register/) and record ORCID iDs for each individual involved with the project be created during the initial stages of project development (i.e. within the data management plan of the project proposal).
 
 ## Licensing and Data Distribution
 
