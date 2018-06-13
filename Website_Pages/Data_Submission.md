@@ -64,7 +64,7 @@ Depending on the size of a research project, multiple data packages may be assoc
 In order to optimally document and share a project's output, quality data file management is necessary. Some resources for best practices for managing data files can be found [here](https://www.dataone.org/best-practices) and [here](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/0012-9623-90.2.205). The following are a few guidelines that are encouraged for file organization for projects that plan to submit to the Arctic Data Center. Following these guidelines should help ensure a project's outputs are easy to access and understand.
 
 - All files should have short, descriptive names.
-- Only letters, numbers, hyphens (“-“), and underscores (“\_”)
+- Only letters, numbers, hyphens ("-"), and underscores ("\_")
 should be used in file names. Always avoid using spaces and specialized ASCII characters when naming files.
 - All files should be stored in open, ubiquitous, and easy-to-read file formats (see [File Format Guidelines](#file-format-guidelines)).
 - Tabular data should be submitted in a long (versus wide) format if possible. Long file formats will make documentation of attributes (variables), as well as access to the data, much easier.
@@ -80,6 +80,7 @@ For projects that plan to submit to the Arctic Data Center, we strongly advise r
 - For GIS files, it is acceptable to submit the de-facto standard ESRI shapefiles, or GeoJSON files.
 - For MATLAB or other matrix-based programs, we advise researchers to export NetCDF files (an open binary format).
 - We encourage researchers to use the NetCDF format when large numbers of uniform matrices or arrays are being archived. See [here](https://www.unidata.ucar.edu/software/netcdf/docs/index.html) for more information about NetCDF files.
+- For transparency and ease of automated parsing, we advise researchers to upload files individually as opposed to zipped archives.  The exception to this guideline is when ubiquitous software expects zipped formats and where the co-existence of the files is required, such as in shapefiles.
 
 ### Metadata Guidelines
 
