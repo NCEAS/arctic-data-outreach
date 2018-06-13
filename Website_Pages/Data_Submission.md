@@ -144,6 +144,8 @@ Models with extensive outputs are a case where data package sizes can become sub
 
 ## The Submission Process
 
+The following sections provide details on logging into the Arctic Data Center using an ORCID account, the licensing requirements for distributing data and metadata, the publication process, and the currently available tools for submission.
+
 ### Identification Guidelines
 
 The Arctic Data Center [ORCID iDs](https://orcid.org/) to identify individuals associated with each data package. When submitting to the Arctic Data Center, an ORCiD is required for the submitter of each data package. ORCiDs are not required for all associated parties (contacts, additional creators, etc.), but are strongly encouraged, especially for the primary creator, so that proper identification and attribution can be given. Additionally, access to edit each data package can only be granted to individuals using ORCiDs. Therefore, we advise researchers to [register](https://orcid.org/register/) and record ORCID iDs for each individual involved with the project during the initial stages of project development (i.e. within the data management plan of the project proposal).
@@ -184,7 +186,7 @@ Researchers can also submit data inside a MATLAB workflow using the [Matlab Data
 
 In addition to the web and data tools shown above, the Arctic Data Center provides the ability to access and submit data via the [DataONE REST API](/catalog/#api). This allows the community to use many programming languages to add data and metadata to the repository, search for and access data, and automate any process that might otherwise be highly time consuming. Most useful to groups with repetitive tasks to perform, such as submitting many data files of the same type, the REST API can be a real time saver. For more details, please contact us at [support@arcticdata.io](mailto:support@arcticdata.io).
  
- The Arctic Data Center currently encodes metadata in the [Ecological Metadata Language (EML)](https://knb.ecoinformatics.org/#external//emlparser/docs/eml-2.1.1/index.html). 
+ The Arctic Data Center currently encodes science metadata in the [Ecological Metadata Language (EML)](https://knb.ecoinformatics.org/#external//emlparser/docs/eml-2.1.1/index.html).  Packaging information (how metadata files are associated with data files) is currently encoded in resource maps using the [Open Archives Initiative Object Reuse and Exchange specification](http://www.openarchives.org/ore). Please contact support@arcticdata.io for detailed help with programmatically producing these XML-based files.
 
 ## Submission Support
 
