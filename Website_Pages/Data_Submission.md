@@ -103,15 +103,22 @@ The goal of metadata is to document a project's output so that a reasonable scie
 
 Additional guidance for specific metadata cases is included below.
 
-#### Metadata Guidelines for Tabular Data
+#### Metadata Guidelines for Tabular and Spatial Data
 
-For data packages with tabular data (e.g. CSV files), submitted metadata should contain the following components for **every** attribute (attributes may also be known as variables and in tabular data are arranged in either columns or rows). Note, storage of data in a long versus wide format will allow for more succinct metadata (see [File Organization Guidelines](#file-organization-guidelines). Also, please note that data stored within structured formats such as zip, NetCDF, or ESRI spatial files should also comply with these guidelines. 
+Submitted metadata should contain detailed metadata for **every** attribute collected. 
+
+Attributes in tabular data (e.g. age, sex, length (ASL) of fish encoded in CSV) are also referred to as variables and are arranged in either columns or rows. Note that storage of data in a long versus wide format will allow for more succinct metadata (see [File Organization Guidelines](#file-organization-guidelines).
+
+In spatial vector data (e.g. lake features encoded in a shapefile), attributes describe a feature characteristic (e.g. lake area). In spatial raster data, the attribute of interest is encoded as a cell value for a given location (e.g. AVHRR Sea Surface Temperature (SST) encoded in a NetCDF matrix). 
+
+The following components are needed to describe each attribute:
 
 - A name (often the column or row header in the file). Like file names, only letters, numbers, hyphens (“-“), and underscores (“\_”) should be used in attribute names. Always avoid using spaces and specialized ASCII characters when naming attributes.
-- A complete definition. The definition should fully clarify the measurement to a broad scientific audience. For example, a definition like %C may always be interpreted within a certain discipline in a uniform way. However, it might always be interpreted within another certain discipline in a different uniform way. A full technical definition such as "percent soil carbon by dry soil mass" helps to limit possible confusion.
+- A complete definition. The definition should fully clarify the measurement to a broad scientific audience. For example, a definition like "%C" may always be interpreted within a certain discipline in a uniform way. However, it might always be interpreted within another certain discipline in a different uniform way. A full technical definition such as "percent soil carbon by dry soil mass" helps to limit possible confusion.
 - Any missing value codes along with explanations for those codes.
 - For all numeric data, unit information is needed.
 - For all date-time data, a date-time format is needed (e.g. "YYYY-MM-DD").
+- For all spatial data, the spatial reference system details are needed.
 - For text data, full descriptions for all patterns/codes are needed if the text is constrained to a list of patterns or codes (e.g. a phone number would be constrained to a certain pattern and abbreviations for site locations may be constrained to a list of codes). 
 
 #### Metadata Guidelines for Software
