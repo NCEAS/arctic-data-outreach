@@ -64,7 +64,7 @@ Depending on the size of a research project, multiple data packages may be assoc
 In order to optimally document and share a project's output, quality data file management is necessary. Some resources for best practices for managing data files can be found [here](https://www.dataone.org/best-practices) and [here](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/0012-9623-90.2.205). The following are a few guidelines that are encouraged for file organization for projects that plan to submit to the Arctic Data Center. Following these guidelines should help ensure a project's outputs are easy to access and understand.
 
 - All files should have short, descriptive names.
-- Only letters, numbers, hyphens (“-“), and underscores (“_”)
+- Only letters, numbers, hyphens (“-“), and underscores (“\_”)
 should be used in file names. Always avoid using spaces and specialized ASCII characters when naming files.
 - All files should be stored in open, ubiquitous, and easy-to-read file formats (see [File Format Guidelines](#file-format-guidelines)).
 - Tabular data should be submitted in a long (versus wide) format if possible. Long file formats will make documentation of attributes (variables), as well as access to the data, much easier.
@@ -106,7 +106,7 @@ Additional guidance for specific metadata cases is included below.
 
 For data packages with tabular data (e.g. CSV files), submitted metadata should contain the following components for **every** attribute (attributes may also be known as variables and in tabular data are arranged in either columns or rows). Note, storage of data in a long versus wide format will allow for more succinct metadata (see [File Organization Guidelines](#file-organization-guidelines). Also, please note that data stored within structured formats such as zip, NetCDF, or ESRI spatial files should also comply with these guidelines. 
 
-- A name (often the column or row header in the file). Like file names, only letters, numbers, hyphens (“-“), and underscores (“_”) should be used in attribute names. Always avoid using spaces and specialized ASCII characters when naming attributes.
+- A name (often the column or row header in the file). Like file names, only letters, numbers, hyphens (“-“), and underscores (“\_”) should be used in attribute names. Always avoid using spaces and specialized ASCII characters when naming attributes.
 - A complete definition. The definition should fully clarify the measurement to a broad scientific audience. For example, a definition like %C may always be interpreted within a certain discipline in a uniform way. However, it might always be interpreted within another certain discipline in a different uniform way. A full technical definition such as "percent soil carbon by dry soil mass" helps to limit possible confusion.
 - Any missing value codes along with explanations for those codes.
 - For all numeric data, unit information is needed.
