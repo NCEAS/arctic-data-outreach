@@ -80,7 +80,7 @@ For projects that plan to submit to the Arctic Data Center, we strongly advise r
 - For GIS files, it is acceptable to submit the de-facto standard ESRI shapefiles, or GeoJSON files.
 - For MATLAB or other matrix-based programs, we advise researchers to export NetCDF files (an open binary format).
 - We encourage researchers to use the NetCDF format when large numbers of uniform matrices or arrays are being archived. See [here](https://www.unidata.ucar.edu/software/netcdf/docs/index.html) for more information about NetCDF files.
-- For transparency and ease of automated parsing, we advise researchers to upload files individually as opposed to zipped archives.  The exception to this guideline is when ubiquitous software expects zipped formats and where the co-existence of the files is required, such as in shapefiles.
+- For transparency and ease of automated parsing, we advise researchers to upload files individually as opposed to zipped archives. Zipped archives are difficult for researchers to use as they don't easily allow researchers to examine what is in an archive and/or access singular objects within an archive. Often researchers don't want to download everything in an archive at once. Additionally, just as it is difficult to examine what is in a zipped archive, it is difficult to sufficiently ascribe metadata to nested files.  The exceptions to this guideline are when ubiquitous software expects zipped formats and where the co-existence of the files is required, such as in shapefiles. 
 
 ### Metadata Guidelines
 
@@ -107,7 +107,7 @@ Additional guidance for specific metadata cases is included below.
 
 Submitted metadata should contain detailed metadata for **every** attribute collected. 
 
-Attributes in tabular data (e.g. age, sex, length (ASL) of fish encoded in CSV) are also referred to as variables and are arranged in either columns or rows. Note that storage of data in a long versus wide format will allow for more succinct metadata (see [File Organization Guidelines](#file-organization-guidelines).
+Attributes in tabular data (e.g. age, sex, length (ASL) of fish encoded in CSV) are often referred to as variables and are arranged in either columns or rows. Note that storage of data in a long versus wide format will allow for more succinct metadata (see [File Organization Guidelines](#file-organization-guidelines).
 
 In spatial vector data (e.g. lake features encoded in a shapefile), attributes describe a feature characteristic (e.g. lake area). In spatial raster data, the attribute of interest is encoded as a cell value for a given location (e.g. AVHRR Sea Surface Temperature (SST) encoded in a NetCDF matrix). 
 
