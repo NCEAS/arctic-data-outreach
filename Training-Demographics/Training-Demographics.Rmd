@@ -15,6 +15,7 @@ This document has visualizations for reporting to NSF on the demographics of the
 
 ```{r load-packages, echo=FALSE,results=FALSE,message=FALSE}
 library(readr)
+library(waffle)
 library(treemap)
 library(tidyr)
 library(knitr)
@@ -148,4 +149,22 @@ treemap(count_roles, #Your data frame object
         title="Participants by Role", #Customize your title
         fontsize.title = 14 #Change the font size of the title
         )
+```
+
+
+```{r age, echo=FALSE}
+
+count_age<-demos %>%  
+  group_by(Age) %>%
+  summarize(n = n())
+
+age_label <- paste(count_age$Age, count_age$n, sep = ", ")
+
+vector<- c(`18-24`=3,`25-29`=23, `30-34`=19, `35-39`=11, `40-49`=14, `50+`=11)
+
+waffle(vector, rows=9, size=0.6,  
+       colors=c("#1B887E", "#B3E1E7", "#19B369",  
+                "#79FD81", "#146660","#1D244E"),  
+       title="Age Groups of Training Participants",  
+       xlab="1 square = 1 person") 
 ```
