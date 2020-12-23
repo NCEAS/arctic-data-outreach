@@ -9,12 +9,13 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Training Demographics
+# Training Demographics
 
 This document has visualizations for reporting to NSF on the demographics of the Arctic Data Center's training participants. It is for internal use only.
 
 ```{r load-packages, echo=FALSE,results=FALSE,message=FALSE}
 library(readr)
+library(treemap)
 library(tidyr)
 library(knitr)
 library(ggplot2)
@@ -50,9 +51,6 @@ library(lattice)
 library(gtable)
 library(ggpubr)
 ```
-
-## Importing Data
-
 Data was downloaded from the Qualtics platform and imported into a google sheet to aggregate the data.
 
 ```{r data, echo=FALSE}
@@ -77,36 +75,35 @@ theme_ADC<- function() {
       panel.grid.major = element_line(colour = "white", size = 0.2), 
     panel.grid.minor = element_line(colour = "white", size = 0.5),)
 }
+
+ADC_colors <- c(
+  `navy`="#1D244E",
+  `light blue`="#B3E1E7",
+  `green`="#19B369",
+  `light green`="#79FD81",
+  `teal`="#146660",
+  `dark teal`="#1B887E",
+  `grey`="#767171",
+  `black`="#000000")
 ```
 
-## Visualizations
+# Visualizations
 
 ## What disciplines are folks coming from?
 ```{r discipline, echo=FALSE}
-
-#Subset - Biology
-demo_biology <- demos[demos$Discipline=="Biology", ] 
-#Subset - Chemistry
-demo_chem <- subset(ADC, !is.na(ADC$reply_to_status_id))
 
 # seeing how many people are in each category
 count_disciplines<-demos %>%  
   group_by(Discipline) %>%
   summarize(n = n())
 
-#setting up parameters for the donut plot
-count_disciplines$fraction = count_disciplines$n / total_participants
+#setting up parameters for the plot
 count_disciplines$percentage = (count_disciplines$n / total_participants) * 100
-count_disciplines$ymax = cumsum(count_disciplines$fraction)
-count_disciplines$ymin = c(0, head(count_disciplines$ymax, n=-1))
 
 #Rounding to two decimal points
 count_disciplines<-round_df(count_disciplines,2)
 
-#Creating the legend
-Discipline<-paste(count_disciplines$Discipline, count_disciplines$percentage)
-Discipline <- paste(Discipline,"%",sep="") 
-
+#making the lollipop plot
 count_disciplines %>%
   arrange(percentage) %>%
   mutate(Discipline=factor(Discipline,Discipline))%>%
@@ -121,4 +118,34 @@ count_disciplines %>%
       legend.position="none"
     ) +
     xlab("")
+```
+`r count_disciplines$Discipline[1]` is the most prevalent discipline with `r count_disciplines$percentage[1]`% of participants, with `r count_disciplines$Discipline[2]` and `r count_disciplines$Discipline[3]` in second and third place, with `r count_disciplines$percentage[2]`% and `r count_disciplines$percentage[3]`%, respectively.
+
+## What career stage are folks in when they take advantage of our trainings?
+```{r role, echo=FALSE}
+
+# seeing how many people are in each category
+count_roles<-demos %>%  
+  group_by(Role) %>%
+  summarize(n = n())
+
+#setting up parameters for the plot
+count_roles$percentage = (count_roles$n / total_participants) * 100
+
+#Rounding to two decimal points
+count_roles<-round_df(count_roles,2)
+
+#making labels
+count_roles$label <- paste(count_roles$Role, count_roles$percentage, sep = ", ")
+count_roles$label <- paste0(count_roles$label, "%")
+
+#making the treemap plot
+treemap(count_roles, #Your data frame object
+        index=c("label"),  #A list of your categorical variables
+        vSize = "percentage",  #This is your quantitative variable
+        type="index", #Type sets the organization and color scheme of your treemap
+        palette = ADC_colors,  #Select your color palette from the RColorBrewer presets or make your own.
+        title="Participants by Role", #Customize your title
+        fontsize.title = 14 #Change the font size of the title
+        )
 ```
