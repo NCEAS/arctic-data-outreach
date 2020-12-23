@@ -168,3 +168,21 @@ waffle(vector, rows=9, size=0.6,
        title="Age Groups of Training Participants",  
        xlab="1 square = 1 person") 
 ```
+
+```{r sector, echo=FALSE}
+
+count_sector<-demos %>%  
+  group_by(Sector) %>%
+  summarize(n = n())
+
+count_sector$percentage = (count_sector$n / total_participants) * 100
+
+count_sector <- count_sector %>% 
+  mutate(Participants = "Participants")
+
+sector<-ggplot(count_sector, aes(fill=Sector, y=percentage,x=Participants)) + 
+    geom_bar(position="stack", stat="identity")+
+  scale_fill_manual(values = c("#1D244E", "#B3E1E7","#1B887E"))
+
+sector+theme_ADC()
+```
