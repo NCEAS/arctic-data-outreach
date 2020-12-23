@@ -1,0 +1,124 @@
+---
+title: "Training-Demographics"
+author: "Erin McLean"
+date: "12/23/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Training Demographics
+
+This document has visualizations for reporting to NSF on the demographics of the Arctic Data Center's training participants. It is for internal use only.
+
+```{r load-packages, echo=FALSE,results=FALSE,message=FALSE}
+library(readr)
+library(tidyr)
+library(knitr)
+library(ggplot2)
+library(syuzhet)
+library(rtweet)
+library(dplyr)
+library(tidytext)
+library(kableExtra)
+library(ggraph)
+library(formattable)
+library(data.table)
+library(dendroTools)
+library(cowplot)
+library(tm)
+library(tokenizers)
+library(tidyverse)
+library(wordcloud)
+library(SnowballC)
+library(RColorBrewer)
+library(wordcloud2)
+library(widyr)
+library(igraph)
+library(topicmodels)
+library(DataCombine)
+library(ggThemeAssist)
+library(quanteda)
+library(data.table)
+library(lubridate)
+library(textclean)
+library(gridExtra)
+library(grid)
+library(lattice)
+library(gtable)
+library(ggpubr)
+```
+
+## Importing Data
+
+Data was downloaded from the Qualtics platform and imported into a google sheet to aggregate the data.
+
+```{r data, echo=FALSE}
+demos <- read_csv("~/Documents/ADC-outreach-git/arctic-data-outreach/Training-Demographics/Training-Demographics.csv")
+
+# figuring out how many total responses we have
+total_participants<-nrow(demos)
+```
+
+```{r creating-custom-theme-colors, echo=FALSE,results=FALSE,message=FALSE}
+theme_ADC<- function() {
+  theme_bw(base_size=12,base_family="Helvetica") %+replace%
+    theme(
+      plot.title=element_text(size=11, face="bold",margin=margin(10,0,10,0),color="#1D244F"),
+      plot.subtitle = element_text(size=10,margin=margin(0,0,10,0),color="#1D244F"),
+        axis.text.x = element_text(angle=50, size=8, vjust=0.5, color="#1D244F"),
+        axis.text.y = element_text(size=8, color="#1D244F"),
+        axis.title.x = element_text(color="#1D244F",vjust=-.5,size=10),
+        axis.title.y = element_text(color="#1D244F",angle=90,vjust=.5,size=10),
+        panel.background=element_rect(fill="white"),
+        axis.line = element_line(color="#1D244F"),
+      panel.grid.major = element_line(colour = "white", size = 0.2), 
+    panel.grid.minor = element_line(colour = "white", size = 0.5),)
+}
+```
+
+## Visualizations
+
+## What disciplines are folks coming from?
+```{r discipline, echo=FALSE}
+
+#Subset - Biology
+demo_biology <- demos[demos$Discipline=="Biology", ] 
+#Subset - Chemistry
+demo_chem <- subset(ADC, !is.na(ADC$reply_to_status_id))
+
+# seeing how many people are in each category
+count_disciplines<-demos %>%  
+  group_by(Discipline) %>%
+  summarize(n = n())
+
+#setting up parameters for the donut plot
+count_disciplines$fraction = count_disciplines$n / total_participants
+count_disciplines$percentage = (count_disciplines$n / total_participants) * 100
+count_disciplines$ymax = cumsum(count_disciplines$fraction)
+count_disciplines$ymin = c(0, head(count_disciplines$ymax, n=-1))
+
+#Rounding to two decimal points
+count_disciplines<-round_df(count_disciplines,2)
+
+#Creating the legend
+Discipline<-paste(count_disciplines$Discipline, count_disciplines$percentage)
+Discipline <- paste(Discipline,"%",sep="") 
+
+count_disciplines %>%
+  arrange(percentage) %>%
+  mutate(Discipline=factor(Discipline,Discipline))%>%
+  ggplot( aes(x=Discipline, y=percentage) ) +
+    geom_segment( aes(x=Discipline ,xend=Discipline, y=0, yend=percentage), color="#1D244E") +
+    geom_point(size=3, color="#B3E1E7") +
+    coord_flip() +
+    theme_ADC() +
+    theme(
+      panel.grid.minor.y = element_blank(),
+      panel.grid.major.y = element_blank(),
+      legend.position="none"
+    ) +
+    xlab("")
+```
