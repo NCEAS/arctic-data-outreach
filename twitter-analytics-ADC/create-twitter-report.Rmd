@@ -1,0 +1,410 @@
+---
+title: "Twitter Analytics - Arctic Data Centert"
+date: "Last updated June 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Arctic Data Center Twitter Metrics
+
+This report contains information about the Arctic Data Center's Twitter account, @ArcticDataCtr, and how effective it is at engaging a wider audience of Arctic researchers, students, and other data organizations.
+
+### Data Collection - Summary
+
+Data was collected manually on the first of the month from https://analytics.twitter.com/user/arcticdatactr/home. This summary file contains:
+
+* month: month of Tweet information
+* year: year of Tweet information
+* tweets: number of Tweets that month
+* profile-visits: number of times users visited the @ArcticDataCtr profile page
+* new-followers: number of new followers gained (gross new followers; does not account for followers lost)
+* tweet-impressions: number of times users are served @ArcticDataCtr tweets in timeline, search results, or from the profile
+* mentions: number of times @ArcticDataCtr was mentioned in tweets
+* number-followers: number of followers, manually copied from https://twitter.com/arcticdatactr. 
+    * Number of followers is the only piece of data in this file that is only available from Twitter at the time you access the site i.e. it is not made available with the rest of the data in this dataset. Thus, there are NAs for dates prior to the time I started to collect this data or for dates before I realized this data was ephemeral.
+
+### Data Collection - Monthly Tweets
+
+Data was scraped using the R package rtweet. This data contains the following parameters:
+
+* Tweet ID: the identifier for the Tweet, which can be used to find the permanent URL
+* Tweet permalink: permanent URL for the Tweet
+* Tweet text: the text (content) of the Tweet
+* time: the time the Tweet was sent (GMT)
+* impressions: number of times users are served the tweet in timeline, search results, or from the @ArcticDataCtr profile
+* engagements: total number of times a user interacted with a Tweet. Clicks anywhere on the Tweet, including Retweets, replies, follows, likes, links, cards, hashtags, embedded media, username, profile photo, or Tweet expansion
+* engagement rate: number of engagements divided by impressions
+* retweets: number of times that Tweet was retweeted
+* replies: number of replies that Tweet generated
+* user profile clicks: number of times a user clicked on the @ArcticDataCtr profile from that particular tweet
+* URL clicks: number of times that URL within the tweet was clicked
+* hashtag clicks: number of times any of your hashtags were clicked from that tweet
+* detail expands: number of times users clicked 'see more' on your tweet
+* permalink clicks: clicks on the Tweet permalink
+* follows: times a user followed you directly from the Tweet
+* email tweet: number of times the Tweet is shared by email
+* media views: number of times media attached to the Tweet is viewed
+* media engagements: an interaction on a tweet that has a piece of media (photo, vine, other video, etc) in it
+
+Other metrics that are collected are all about promoted views, etc. which the Arctic Data Center doesn't use, and as such those were excluded from the analysis.
+
+```{r load-packages, echo=FALSE,results=FALSE,message=FALSE}
+library(readr)
+library(tidyr)
+library(knitr)
+library(ggplot2)
+library(syuzhet)
+library(rtweet)
+library(dplyr)
+library(tidytext)
+library(kableExtra)
+library(ggraph)
+library(formattable)
+library(data.table)
+library(dendroTools)
+library(cowplot)
+library(tm)
+library(tokenizers)
+library(tidyverse)
+library(wordcloud)
+library(SnowballC)
+library(RColorBrewer)
+library(wordcloud2)
+library(widyr)
+library(igraph)
+library(topicmodels)
+library(DataCombine)
+library(ggThemeAssist)
+library(quanteda)
+library(data.table)
+library(lubridate)
+library(textclean)
+```
+
+```{r raw-data, echo=FALSE,results=FALSE,message=FALSE}
+twitter_summary_metrics <- read_csv("~/Documents/Twitter Analytics/Raw Data/twitter-summary-metrics.csv")
+twitter_summary_metrics$Date <-as.Date(twitter_summary_metrics$Date) 
+```
+
+```{r creating-custom-theme-colors, echo=FALSE,results=FALSE,message=FALSE}
+theme_ADC<- function() {
+  theme_bw(base_size=12,base_family="Helvetica") %+replace%
+    theme(
+      plot.title=element_text(size=11, face="bold",margin=margin(10,0,10,0),color="#1D244F"),
+      plot.subtitle = element_text(size=10,margin=margin(0,0,10,0),color="#1D244F"),
+        axis.text.x = element_text(angle=50, size=8, vjust=0.5, color="#1D244F"),
+        axis.text.y = element_text(size=8, color="#1D244F"),
+        axis.title.x = element_text(color="#1D244F",vjust=-.5,size=10),
+        axis.title.y = element_text(color="#1D244F",angle=90,vjust=.5,size=10),
+        panel.background=element_rect(fill="white"),
+        axis.line = element_line(color="#1D244F"),
+      panel.grid.major = element_line(colour = "white", size = 0.2), 
+    panel.grid.minor = element_line(colour = "white", size = 0.5),
+    )
+}
+
+ADC_colors <- c(
+  `navy`="#1D244E",
+  `light blue`="#B3E1E7",
+  `green`="#19B369",
+  `light green`="#79FD81",
+  `teal`="#146660",
+  `dark teal`="#1B887E",
+  `grey`="#767171",
+  `black`="#000000")
+```
+
+## Summary Information
+
+```{r monthly-tweets, echo=FALSE,results=FALSE,message=FALSE}
+monthlytweets<-ggplot(data = twitter_summary_metrics, aes(x=Date, y=Tweets)) +
+  geom_line(color="#156760",size=1.5)+
+  labs(title='Monthly Tweets Over Time',
+       x="Date",
+       y="Tweets")
+
+monthlytweets<-monthlytweets+theme_ADC()
+```
+
+```{r followers, echo=FALSE}
+followers<-ggplot(data = twitter_summary_metrics, aes(x=Date, y=New_Followers)) +
+  geom_line(color="#156760",size=1.5)+
+  labs(title='Monthly Followers Over Time',
+       x="Date",
+       y="Followers")
+
+followers<-followers+theme_ADC()
+
+```
+
+```{r impressions, echo=FALSE}
+impressions<-ggplot(data = twitter_summary_metrics, aes(x=Date, y=Tweet_Impressions)) +
+  geom_point(color="#156760",size=2.5)+
+    labs(title='Monthly Impressions Over Time',
+       x="Date",
+       y="Impressions")
+
+impressions<-impressions+theme_ADC()
+```
+
+```{r tweet-impressions, echo=FALSE}
+tweetimpressions<-ggplot(data = twitter_summary_metrics, aes(x=Tweets, y=Tweet_Impressions)) +
+  geom_point(color="#156760",size=2.5)+
+  labs(title='Impact of Tweets on Impressions',
+       x="Tweets",
+       y="Impressions")+
+  stat_smooth(method="lm", se=FALSE, color="#B4E6EA",size=1)
+
+tweetimpressions<-tweetimpressions+theme_ADC()
+```
+
+```{r 4-graphs, echo=FALSE}
+plot_grid(monthlytweets,followers,impressions,tweetimpressions,
+          ncol=2, nrow=2,
+          rel_widths = c(1.5,1.5,1.5,1.5))
+```
+
+```{r twitter-data, echo=FALSE}
+ADC <- get_timeline("@ArcticDataCtr", n= 3200)
+
+#write.csv(ADC,"/Users/mclean/Downloads/ADC-Tweet-Data.csv", row.names = FALSE)
+```
+
+```{r twitter-clean, echo=FALSE}
+ADC$text <-replace_html(ADC$text,symbol=TRUE)
+
+#Creating an organic tweet list
+#Remove retweets
+ADC_tweets_organic <- ADC[ADC$is_retweet==FALSE, ] 
+# Remove replies
+ADC_tweets_organic <- subset(ADC_tweets_organic, is.na(ADC_tweets_organic$reply_to_status_id)) 
+ADC_tweets_organic$created_at <-as.character.Date(ADC_tweets_organic$created_at) 
+ADC_tweets_organic$hashtags <- lapply(ADC_tweets_organic$hashtags, paste0, collapse = ", ")
+
+#Keeping ONLY the retweets
+ADC_retweets <- ADC[ADC$is_retweet==TRUE, ] 
+
+#Keeping ONLY the replies
+ADC_replies <- subset(ADC, !is.na(ADC$reply_to_status_id))
+
+#Separating by date
+ADC_2020<-subset(ADC, created_at > as.Date("2020-03-01"))
+#Remove retweets
+ADC_2020tweets_organic <- ADC_2020[ADC_2020$is_retweet==FALSE, ] 
+# Remove replies
+ADC_2020tweets_organic <- subset(ADC_2020tweets_organic, is.na(ADC_2020tweets_organic$reply_to_status_id)) 
+ADC_2020text_tweets <- ADC_2020tweets_organic %>%
+  select(text) %>%
+  unnest_tokens(word, text)
+
+#cleaning organic tweets of any characters we don't want to show in the analysis, like @ or links
+ADC_2020text_tweets$word <-  gsub("https\\S*", "", ADC_2020text_tweets$word)
+ADC_2020text_tweets$word <-  gsub("@\\S*", "", ADC_2020text_tweets$word) 
+ADC_2020text_tweets$word  <-  gsub("amp", "", ADC_2020text_tweets$word) 
+
+#removing stop words from the text
+ADC_2020text_tweets<-as.data.frame(ADC_2020text_tweets,na.rm=TRUE)
+ADC_2020text_tweets$word<-as.character(ADC_2020text_tweets$word)
+
+ADC_2019<-subset(ADC, created_at < as.Date("2020-03-01"))
+#Remove retweets
+ADC_2019tweets_organic <- ADC_2019[ADC_2019$is_retweet==FALSE, ] 
+# Remove replies
+ADC_2019tweets_organic <- subset(ADC_2019tweets_organic, is.na(ADC_2019tweets_organic$reply_to_status_id)) 
+ADC_2019text_tweets <- ADC_2019tweets_organic %>%
+  select(text) %>%
+  unnest_tokens(word, text)
+
+#cleaning organic tweets of any characters we don't want to show in the analysis, like @ or links
+ADC_2019text_tweets$word <-  gsub("https\\S*", "", ADC_2019text_tweets$word)
+ADC_2019text_tweets$word <-  gsub("@\\S*", "", ADC_2019text_tweets$word) 
+ADC_2019text_tweets$word  <-  gsub("amp", "", ADC_2019text_tweets$word) 
+
+#removing stop words from the text
+ADC_2019text_tweets<-as.data.frame(ADC_2019text_tweets,na.rm=TRUE)
+ADC_2019text_tweets$word<-as.character(ADC_2019text_tweets$word)
+```
+
+#### Top 10: Most Liked Tweets
+```{r twitter-faves, echo=FALSE}
+
+ADC_tweets_organic <- ADC_tweets_organic %>% arrange(-favorite_count)
+ADC_tweets_fav <- select(ADC_tweets_organic,text,created_at,favorite_count, retweet_count,hashtags)
+ADC_tweets_fav <- ADC_tweets_fav[1:10,]
+
+ADC_tweets_fav %>% 
+  kable(col.names=c("Tweet","Date and Time","Likes","Retweets", "Hashtags Used")) %>% 
+  kable_styling() %>% 
+  column_spec(2,width="10em") %>% 
+  column_spec(1,width="35em") %>% 
+  column_spec(5,width="10em") 
+
+```
+
+#### Top 10: Most Retweeted Tweets
+```{r twitter-retweets, echo=FALSE}
+
+ADC_tweets_organic <- ADC_tweets_organic %>% arrange(-retweet_count)
+ADC_tweets_retweets <- select(ADC_tweets_organic,text,created_at,favorite_count, retweet_count,hashtags)
+ADC_tweets_retweets <- ADC_tweets_retweets[1:10,]
+
+ADC_tweets_retweets %>% 
+  kable(col.names=c("Tweet","Date and Time","Likes","Retweets", "Hashtags Used")) %>% 
+  kable_styling() %>% 
+  column_spec(2,width="10em") %>% 
+  column_spec(1,width="35em") %>% 
+  column_spec(5,width="10em") 
+
+```
+
+#### Distribution of replies, retweets, and organic tweets
+Analyzing the ratio of replies, retweets and organic tweets can tell you a great deal about the type of account you’re analysing. No one likes a Twitter account that exclusively retweets for instance, without any individual content. Finding a good ratio of replies, retweets and organic tweets is therefore a key metric to monitor if one wishes to improve the performance of an account.
+```{r twitter-ratio, echo=FALSE}
+
+tweet_ratio <- data.frame(
+  category=c("Retweets", "Replies", "Organic Tweets"),
+  count=c(nrow(ADC_retweets), nrow(ADC_replies), nrow(ADC_tweets_organic))
+)
+
+# Adding calculated data columns
+tweet_ratio$fraction = tweet_ratio$count / sum(tweet_ratio$count)
+tweet_ratio$percentage = tweet_ratio$count / sum(tweet_ratio$count) * 100
+tweet_ratio$ymax = cumsum(tweet_ratio$fraction)
+tweet_ratio$ymin = c(0, head(tweet_ratio$ymax, n=-1))
+
+#Rounding to two decimal points
+tweet_ratio<-round_df(tweet_ratio,2)
+
+#Creating the legend
+TweetType<-paste(tweet_ratio$category, tweet_ratio$percentage, "%")
+
+#Plotting the data
+ggplot(tweet_ratio,aes(ymax=ymax, ymin=ymin, xmax=4,xmin=3,fill=TweetType))+
+  geom_rect()+
+  coord_polar(theta="y")+
+  xlim(c(2,4))+
+  theme_void()+
+  theme(legend.position = "right")+ 
+  scale_fill_manual(values=c( "#79FDB1","#B4E6EA","#1D244E"))
+```
+
+### Tweet Text Analysis
+Bar graph illustrating the 15 most commonly tweeted words in @ArcticDataCtr's tweets, with common stop words removed from the list.
+```{r text-analysis, echo=FALSE}
+#Remove retweets
+ADC_tweets_organic <- ADC[ADC$is_retweet==FALSE, ] 
+# Remove replies
+ADC_tweets_organic <- subset(ADC_tweets_organic, is.na(ADC_tweets_organic$reply_to_status_id)) 
+
+ADC_text_tweets <- ADC_tweets_organic %>%
+  select(text) %>%
+  unnest_tokens(word, text)
+
+#cleaning organic tweets of any characters we don't want to show in the analysis, like @ or links
+ADC_text_tweets$word <-  gsub("https\\S*", "", ADC_text_tweets$word)
+ADC_text_tweets$word <-  gsub("@\\S*", "", ADC_text_tweets$word) 
+ADC_text_tweets$word  <-  gsub("amp", "", ADC_text_tweets$word) 
+#ADC_text_tweets$word  <-  gsub("[\r\n]", "", ADC_text_tweets$word)
+#ADC_text_tweets$word  <-  gsub("[:digit:]", "", ADC_text_tweets$word)
+#ADC_text_tweets$word  <-  gsub("[:punct:]", "", ADC_text_tweets$word)
+
+#removing stop words from the text
+
+ADC_text_tweets<-as.data.frame(ADC_text_tweets,na.rm=TRUE)
+ADC_text_tweets$word<-as.character(ADC_text_tweets$word)
+
+all_stops <- as.data.frame(stopwords("en"))
+colnames(all_stops)<- c("word")
+all_stops$word<-as.character(all_stops$word)
+
+ADC_text_tweets_cleaned <-ADC_text_tweets[!ADC_text_tweets$word%in%all_stops$word,]
+
+ADC_text_tweets_cleaned<-as.data.frame(table(ADC_text_tweets_cleaned))
+
+ADC_text_tweets_cleaned <- ADC_text_tweets_cleaned %>% arrange(-Freq)
+#selecting out stop words from the table since it doesn't seem to do that automatically....
+ADC_text_tweets_cleaned <- ADC_text_tweets_cleaned[c(3:6, 9:10, 12:15,17,19:21,24),]
+
+ADC_text_tweets_cleanedgraph<-ADC_text_tweets_cleaned %>% 
+  ggplot(aes(x=reorder(ADC_text_tweets_cleaned,Freq),y=Freq))+
+  geom_col(fill="#156760", color="#79FDB1")+
+  coord_flip() +
+  labs(y="Count",
+      x="Unique Words",
+      title="Top 15 frequently used words in the Arctic Data Center's tweets",
+      caption ="Common stop words removed from list.")
+
+ADC_text_tweets_cleanedgraph+theme_ADC()
+```
+
+### Showing the most frequently used hashtags
+Hashtags used more than 5 times are displayed in the wordcloud below.
+```{r hashtags, echo=FALSE, warning=FALSE}
+ADC_tweets_organic$hashtags <- as.character(ADC_tweets_organic$hashtags)
+ADC_tweets_organic$hashtags <- gsub("c\\(", "", ADC_tweets_organic$hashtags)
+
+set.seed(1234)
+wordcloud(ADC_tweets_organic$hashtags, min.freq=5, scale=c(6, .75), random.order=FALSE, rot.per=0.45, 
+          colors=ADC_colors)
+```
+
+### Understanding what accounts we frequently retweet
+Accounts retweeted more than 3 times are displayed in the wordcloud below.
+```{r retweet-tracker, echo=FALSE, warning=FALSE}
+set.seed(1234)
+wordcloud(ADC_retweets$retweet_screen_name, min.freq=3, scale=c(4, .75), random.order=FALSE, rot.per=0.55, 
+          colors=ADC_colors)
+
+```
+
+### Understanding the sentiment of tweet content
+No one likes a Twitter account that only spreads angry or sad tweets. Capturing the tone of your tweets and how they balance out is a good indication of your account’s performance.
+
+There are short comings as well like conflation deficiency that is the inability to discriminate among different meanings of a word. For example, the word “bat” has at least two distinct meanings: a flying animal, and a piece of sporting equipment. Another challenge is a text may contain multiple sentiments all at once.
+
+Positive and negative are summary values: the positive bar encompasses anticipation, joy, surprise, and trust; the negative bar encompasses anger, disgust, fear, and sadness.
+```{r sentiment-tracker, echo=FALSE, warning=FALSE}
+
+#all tweets
+# Converting tweets to ASCII to tackle strange characters
+ADC_text_tweets <- iconv(ADC_text_tweets, from="UTF-8", to="ASCII", sub="")
+
+#ADC_text_tweets_cleaned<-as.vector(ADC_text_tweets_cleaned["ADC_text_tweets_cleaned"],mode = "character")
+
+ADC_sentiment<-get_nrc_sentiment((ADC_text_tweets),language="english")
+ADC_sentimentscores<-data.frame(colSums(ADC_sentiment[,]))
+
+names(ADC_sentimentscores) <- "Score"
+
+ADC_sentimentscores <- cbind("sentiment"=rownames(ADC_sentimentscores),ADC_sentimentscores)
+rownames(ADC_sentimentscores) <- NULL
+
+#sentiments
+sentiment_graph<-ggplot(data=ADC_sentimentscores[1:8,],aes(x=sentiment,y=Score))+
+  geom_bar(aes(fill=sentiment),stat = "identity",color="black",position=position_dodge())+
+  xlab("Sentiments")+ylab("Scores")+
+  ggtitle("Total sentiment based on scores")+
+  scale_fill_manual(values=c("#1D244E","#B3E1E7","#19B369","#79FD81","#767171","#146660","#000000","#1B887E"))
+
+#Aggregated positiv and negative
+aggregated_sentiment_graph<-ggplot(data=ADC_sentimentscores[9:10,],aes(x=sentiment,y=Score))+
+  geom_bar(aes(fill=sentiment),stat = "identity",color="black",position=position_dodge())+
+  xlab("Sentiments")+ylab("Scores")+
+  ggtitle("Total sentiment based on scores")+
+  scale_fill_manual(values=c("#1D244E","#B3E1E7"))
+
+
+sentiment_graph<-sentiment_graph+theme_ADC()+theme(legend.position="none")
+aggregated_sentiment_graph<-aggregated_sentiment_graph+theme_ADC()+theme(legend.position="none") 
+```
+
+```{r 2-graphs, echo=FALSE}
+plot_grid(sentiment_graph,aggregated_sentiment_graph,
+          ncol=2, 
+          #nrow=2,
+          rel_widths = c(5,5))
+```
+

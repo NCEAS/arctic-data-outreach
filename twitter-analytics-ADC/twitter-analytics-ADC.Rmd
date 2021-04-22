@@ -1,0 +1,546 @@
+---
+title: "Twitter Analytics - Arctic Data Center"
+date: "Last Updated May 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Arctic Data Center Twitter Metrics
+
+I created a Twitter Engagement plan with the hope of increasing the Arctic Data Center's presence on Twitter. As Twitter has been gaining traction as a tool for both outreach with scientists and not scientists, I thought it would be a good way to better publicize data management and Arctic-focused news, new papers, submitted datasets, and conference participation.
+
+In the era of COVID-19, online engagement is as important as ever, so I'm going to start tracking monthly Twitter metrics to see if what I'm doing is actually making a difference.
+
+# Data Collection - Summary
+
+I collected data manually from https://analytics.twitter.com/user/arcticdatactr/home once a month near the first of each month and added it to the folder Twitter Metrics. This summary file contains:
+
+* month: month of Tweet information
+* year: year of Tweet information
+* tweets: number of Tweets that month
+* profile-visits: Number of times users visited your profile page
+* new-followers: Number of new followers you gained (equals gross new followers; does not account for followers lost)
+* tweet-impressions: Number of times users are served your tweet in timeline, search results, or from your profile
+* mentions: Number of times your @username was mentioned in tweets
+* number-followers: Number of followers, manually copied from https://twitter.com/arcticdatactr. 
+    * Number of followers is the only piece of data in this file that is only available from Twitter at the time you access the site i.e. it is not made available with the rest of the data in this dataset. Thus, there are NAs for dates prior to the time I started to collect this data or for dates before I realized this data was ephemeral.
+
+# Data Collection - Monthly Tweets
+
+I collected tweets from https://analytics.twitter.com/user/arcticdatactr/home once a month near the first of each month and added it to the folder Twitter Metrics. These monthly files contain:
+
+* Tweet-ID: the identifier for the Tweet, which can be used to find the permanent URL
+* Tweet-permalink: where to find the Tweet
+* Tweet-text: the text (content) of the Tweet
+* time: the time the Tweet was sent (GMT)
+* impressions: Number of times users are served your tweet in timeline, search results, or from your profile
+* engagements: 
+* engagement-rate:
+* retweets: number of times that Tweet was retweeted
+* replies: number of replies that Tweet generated
+* user-profile-clicks: number of times a user clicked on your profile from that particular tweet
+* URL-clicks: number of times that URL within the tweet was clicked
+* hashtag-clicks: number of times any of your hashtags were clicked from that tweet
+* detail-expands: number of times users clicked 'see more' on your tweet
+* permalink-clicks:
+* follows:
+* email-tweet:
+* dial-phone: 
+* media-views: 
+* media-engagements:
+
+Other metrics that are collected are all about promoted views, etc. which the Arctic Data Center doesn't use, and as such those were excluded from the analysis.
+
+## Data Analysis
+```{r load-packages, echo=FALSE,results=FALSE,message=FALSE}
+library(readr)
+library(tidyr)
+library(knitr)
+library(ggplot2)
+library(rtweet)
+library(dplyr)
+library(tidytext)
+library(kableExtra)
+library(ggraph)
+library(formattable)
+library(data.table)
+library(dendroTools)
+library(cowplot)
+library(tm)
+library(tokenizers)
+library(tidyverse)
+library(wordcloud)
+library(SnowballC)
+library(RColorBrewer)
+library(wordcloud2)
+library(widyr)
+library(igraph)
+library(topicmodels)
+library(DataCombine)
+library(ggThemeAssist)
+library(quanteda)
+library(data.table)
+library(lubridate)
+```
+
+```{r raw-data, echo=FALSE,results=FALSE,message=FALSE}
+twitter_summary_metrics <- read_csv("~/Documents/Twitter Analytics/Raw Data/twitter-summary-metrics.csv")
+twitter_summary_metrics$Date <-as.Date(twitter_summary_metrics$Date) 
+```
+
+```{r display-table, echo=FALSE}
+#knitr::kable(twitter_summary_metrics, caption = "Twitter Metrics Table")
+```
+
+## Graphing Data - Summary Info
+```{r creating-custom-theme, echo=FALSE,results=FALSE,message=FALSE}
+theme_ADC<- function() {
+  theme_bw(base_size=12,base_family="Helvetica") %+replace%
+    theme(
+      plot.title=element_text(size=11, face="bold",margin=margin(10,0,10,0),color="#1D244F"),
+      plot.subtitle = element_text(size=10,margin=margin(0,0,10,0),color="#1D244F"),
+        axis.text.x = element_text(angle=50, size=8, vjust=0.5, color="#1D244F"),
+        axis.text.y = element_text(size=8, color="#1D244F"),
+        axis.title.x = element_text(color="#1D244F",vjust=-.5,size=10),
+        axis.title.y = element_text(color="#1D244F",angle=90,vjust=.5,size=10),
+        panel.background=element_rect(fill="white"),
+        axis.line = element_line(color="#1D244F"),
+      panel.grid.major = element_line(colour = "white", size = 0.2), 
+    panel.grid.minor = element_line(colour = "white", size = 0.5),
+    )
+}
+```
+
+```{r monthly-tweets, echo=FALSE,results=FALSE,message=FALSE}
+monthlytweets<-ggplot(data = twitter_summary_metrics, aes(x=Date, y=Tweets)) +
+  geom_line(color="#156760",size=1.5)+
+  labs(title='Number of Monthly Tweets Over Time',
+       x="Date",
+       y="Tweets")
+
+monthlytweets<-monthlytweets+theme_ADC()
+```
+
+```{r followers, echo=FALSE}
+followers<-ggplot(data = twitter_summary_metrics, aes(x=Date, y=New_Followers)) +
+  geom_line(color="#156760",size=1.5)+
+  labs(title='Number of Monthly Followers Over Time',
+       x="Date",
+       y="Followers")
+
+followers<-followers+theme_ADC()
+
+```
+
+```{r impressions, echo=FALSE}
+impressions<-ggplot(data = twitter_summary_metrics, aes(x=Date, y=Tweet_Impressions)) +
+  geom_point(color="#156760",size=2.5)+
+    labs(title='Number of Monthly Impressions Over Time',
+       x="Date",
+       y="Impressions")
+
+impressions<-impressions+theme_ADC()
+```
+
+```{r tweet-impressions, echo=FALSE}
+tweetimpressions<-ggplot(data = twitter_summary_metrics, aes(x=Tweets, y=Tweet_Impressions)) +
+  geom_point(color="#156760",size=2.5)+
+  labs(title='Impact of Tweets on Impressions',
+       x="Tweets",
+       y="Impressions")+
+  stat_smooth(method="lm", se=FALSE, color="#B4E6EA",size=1)
+
+tweetimpressions<-tweetimpressions+theme_ADC()
+
+```
+
+```{r 4-graphs, echo=FALSE}
+plot_grid(monthlytweets,followers,impressions,tweetimpressions,
+          ncol=2, nrow=2,
+          rel_widths = c(1.5,1.5,1.5,1.5))
+
+```
+
+## Data Analysis - Tweet Level Info
+```{r twitter-data, echo=FALSE}
+ADC <- get_timeline("@ArcticDataCtr", n= 3200)
+
+ADC$text <-replace_html(ADC$text,symbol=TRUE)
+
+#Creating an organic tweet list
+#Remove retweets
+ADC_tweets_organic <- ADC[ADC$is_retweet==FALSE, ] 
+# Remove replies
+ADC_tweets_organic <- subset(ADC_tweets_organic, is.na(ADC_tweets_organic$reply_to_status_id)) 
+ADC_tweets_organic$created_at <-as.character.Date(ADC_tweets_organic$created_at) 
+ADC_tweets_organic$hashtags <- lapply(ADC_tweets_organic$hashtags, paste0, collapse = ", ")
+
+#Keeping ONLY the retweets
+ADC_retweets <- ADC[ADC$is_retweet==TRUE, ] 
+
+#Keeping ONLY the replies
+ADC_replies <- subset(ADC, !is.na(ADC$reply_to_status_id))
+```
+
+### Top 10: Most Liked Tweets
+```{r twitter-faves, echo=FALSE}
+
+ADC_tweets_organic <- ADC_tweets_organic %>% arrange(-favorite_count)
+ADC_tweets_fav <- select(ADC_tweets_organic,text,created_at,favorite_count, retweet_count,hashtags)
+ADC_tweets_fav <- ADC_tweets_fav[1:10,]
+
+ADC_tweets_fav %>% 
+  kable(col.names=c("Tweet","Date and Time","Likes","Retweets", "Hashtags Used")) %>% 
+  kable_styling() %>% 
+  column_spec(2,width="10em") %>% 
+  column_spec(1,width="35em") %>% 
+  column_spec(5,width="10em") 
+
+```
+
+### Top 10: Most Retweeted Tweets
+```{r twitter-retweets, echo=FALSE}
+
+ADC_tweets_organic <- ADC_tweets_organic %>% arrange(-retweet_count)
+ADC_tweets_retweets <- select(ADC_tweets_organic,text,created_at,favorite_count, retweet_count,hashtags)
+ADC_tweets_retweets <- ADC_tweets_retweets[1:10,]
+
+ADC_tweets_retweets %>% 
+  kable(col.names=c("Tweet","Date and Time","Likes","Retweets", "Hashtags Used")) %>% 
+  kable_styling() %>% 
+  column_spec(2,width="10em") %>% 
+  column_spec(1,width="35em") %>% 
+  column_spec(5,width="10em") 
+
+```
+
+### Distribution of replies, retweets, and organic tweets
+```{r twitter-ratio, echo=FALSE}
+
+tweet_ratio <- data.frame(
+  category=c("Retweets", "Replies", "Organic Tweets"),
+  count=c(nrow(ADC_retweets), nrow(ADC_replies), nrow(ADC_tweets_organic))
+)
+
+# Adding calculated data columns
+tweet_ratio$fraction = tweet_ratio$count / sum(tweet_ratio$count)
+tweet_ratio$percentage = tweet_ratio$count / sum(tweet_ratio$count) * 100
+tweet_ratio$ymax = cumsum(tweet_ratio$fraction)
+tweet_ratio$ymin = c(0, head(tweet_ratio$ymax, n=-1))
+
+#Rounding to two decimal points
+tweet_ratio<-round_df(tweet_ratio,2)
+
+#Creating the legend
+TweetType<-paste(tweet_ratio$category, tweet_ratio$percentage, "%")
+
+#Plotting the data
+ggplot(tweet_ratio,aes(ymax=ymax, ymin=ymin, xmax=4,xmin=3,fill=TweetType))+
+  geom_rect()+
+  coord_polar(theta="y")+
+  xlim(c(2,4))+
+  theme_void()+
+  theme(legend.position = "right")+ 
+  scale_fill_manual(values=c( "#79FDB1","#B4E6EA","#1D244E"))
+```
+
+## Analyzing text of tweets
+```{r text-analysis, echo=FALSE}
+#Remove retweets
+ADC_tweets_organic <- ADC[ADC$is_retweet==FALSE, ] 
+# Remove replies
+ADC_tweets_organic <- subset(ADC_tweets_organic, is.na(ADC_tweets_organic$reply_to_status_id)) 
+
+ADC_text_tweets <- ADC_tweets_organic %>%
+  select(text) %>%
+  unnest_tokens(word, text)
+
+#cleaning organic tweets of any characters we don't want to show in the analysis, like @ or links
+ADC_text_tweets$word <-  gsub("https\\S*", "", ADC_text_tweets$word)
+ADC_text_tweets$word <-  gsub("@\\S*", "", ADC_text_tweets$word) 
+ADC_text_tweets$word  <-  gsub("amp", "", ADC_text_tweets$word) 
+#ADC_text_tweets$word  <-  gsub("[\r\n]", "", ADC_text_tweets$word)
+#ADC_text_tweets$word  <-  gsub("[:digit:]", "", ADC_text_tweets$word)
+#ADC_text_tweets$word  <-  gsub("[:punct:]", "", ADC_text_tweets$word)
+
+#removing stop words from the text
+
+ADC_text_tweets<-as.data.frame(ADC_text_tweets,na.rm=TRUE)
+ADC_text_tweets$word<-as.character(ADC_text_tweets$word)
+
+all_stops <- as.data.frame(stopwords("en"))
+colnames(all_stops)<- c("word")
+all_stops$word<-as.character(all_stops$word)
+
+ADC_text_tweets_cleaned <-ADC_text_tweets[!ADC_text_tweets$word%in%all_stops$word,]
+
+ADC_text_tweets_cleaned<-as.data.frame(table(ADC_text_tweets_cleaned))
+
+ADC_text_tweets_cleaned <- ADC_text_tweets_cleaned %>% arrange(-Freq)
+ADC_text_tweets_cleaned <- ADC_text_tweets_cleaned[c(3:5, 7:10, 12:15,18:21),]
+
+ADC_text_tweets_cleanedgraph<-ADC_text_tweets_cleaned %>% 
+  ggplot(aes(x=reorder(ADC_text_tweets_cleaned,Freq),y=Freq))+
+  geom_col(fill="#156760", color="#79FDB1")+
+  coord_flip() +
+  labs(y="Count",
+      x="Unique Words",
+      title="Top 15 frequently used words in the Arctic Data Center's tweets",
+      caption ="Common stop words removed from list.")
+
+ADC_text_tweets_cleanedgraph+theme_ADC()
+```
+
+## Using tidytext, tm, and quanteda to make some cute wordclouds and plots
+```{r word-clouds, echo=FALSE,results=FALSE, message=FALSE,warning=FALSE}
+
+#reducing file to text only
+text_only <- ADC_tweets_organic$text
+
+#Load the data as a corpus
+docs <- Corpus(VectorSource(text_only))
+
+# Cleaning up data
+
+# Remove numbers
+docs <- tm_map(docs, removeNumbers)
+
+# Remove english common stopwords
+docs <- tm_map(docs, removeWords, all_stops$word)
+docs <- tm_map(docs, removeWords, stopwords("english"))
+
+# Remove punctuations
+docs <- tm_map(docs, removePunctuation)
+
+# Eliminate extra white spaces
+docs <- tm_map(docs, stripWhitespace)
+
+# I have found this text stemming function to be quite squirrely. It is supposed to reduce words like "sciences" down to "science" so they can be considered the same word but it is frequently chopping the s or ed of of words it should not.
+# Text stemming
+# docs <- tm_map(docs, stemDocument)
+# Removing words I don't want
+docs <- tm_map(docs, removeWords, c("center", "amp", "arcticdatactr","may", "this","were","one","can","the"))
+               
+#Building a term document matrix for tweets
+dtm <- TermDocumentMatrix(docs)
+
+m <- as.matrix(dtm)
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+head(d, 100)
+
+d<-d[1:80,]
+
+#set.seed(1234)
+#wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+      #  max.words=100, random.order=FALSE, rot.per=0.35, 
+     #  colors=brewer.pal(8, "Dark2"), scale=c(3.3,0.25))
+
+#set.seed(1234)
+#wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+       # max.words=80, random.order=FALSE, rot.per=0.35, 
+      # colors=brewer.pal(10, "Dark2"), scale=c(5.3,0.25))
+
+ADC_color_pal <- c("#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#146660","#146660","#146660","#146660","#146660","#146660","#146660","#146660","#146660","#146660","#146660","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171")
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+         random.order=FALSE, ordered.colors=TRUE, rot.per=0.35, 
+       colors= ADC_color_pal, scale=c(7,.5))
+
+```
+
+```{r tidy-tweets, echo=FALSE, message=FALSE,warning=FALSE}
+tidy_tweets  <- ADC_tweets_organic %>%
+  unnest_tokens(word, 'text')
+
+# Now that the data is in one-word-per-row format, we can manipulate it with tidy tools like dplyr. 
+data(stop_words)
+tidy_tweets  <- tidy_tweets  %>%
+  anti_join(stop_words)
+
+# Removing uninformative words
+my_stopwords <- tibble(word = c(as.character(1:3), "center", "arcticdatactr", "https", "amp", "t.co", "dataoneorg"))
+
+tidy_tweets  <- tidy_tweets  %>% 
+  anti_join(my_stopwords)
+
+# Removing symbols
+remove_reg <- "&amp;|&lt;|&gt;."
+
+tidy_tweets  <- tidy_tweets  %>% 
+  mutate(text = str_remove_all(word, remove_reg))
+
+# removing any rows with numbers in the word column
+tidy_tweets  <- tidy_tweets  %>% 
+  filter(!str_detect(word, "\\d"))
+
+# This is making all the words uppercase. I find this aesthetically pleasing but feel free to delete
+tidy_tweets <- tidy_tweets %>% 
+  mutate(word = toupper(word))
+
+#We can use dplyr’s count() to find the most common words in all the tweets as a whole.
+#tidy_tweets  %>%
+  #count(word, sort = TRUE) 
+
+# Making sure each word is used 10 or more times
+#tidy_tweet_10 <- tidy_tweets %>%
+ #count(word, sort = TRUE) %>%
+  #filter(n > 10) 
+
+#set.seed(1234)
+#wordcloud(words = tidy_tweet_10$word, freq = tidy_tweet_10$n, min.freq = 1,
+         # max.words=50, random.order=FALSE, rot.per=0.35, 
+          #colors=brewer.pal(8, "Dark2"), scale=c(5,0.35))
+
+# Making sure each word is used at least 5x
+tidy_tweet_5 <- tidy_tweets %>%
+  count(word, sort = TRUE) %>%
+  filter(n > 5) 
+
+set.seed(1234)
+wordcloud2(data = tidy_tweet_5, color = ADC_color_pal, backgroundColor="white", size = 1) 
+```
+
+# Using tidy text to look for correlations within Arctic Data Center tweets
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+# Using tidy text to look for correlations within ADC tweets
+ADC_tweets <- tibble(id = tidy_tweets$created_at, 
+                         title = tidy_tweets$text)
+
+# View (ADC tweets)
+ADC_tweets <- ADC_tweets %>% 
+  unnest_tokens(word, title) %>% 
+  anti_join(stop_words)
+
+
+# We can use pairwise_count() from the widyr package to count how many times each pair of words occurs together in a title or description field.
+tweet_word_pairs <- ADC_tweets %>% 
+  pairwise_count(word, id, sort = TRUE, upper = FALSE)
+
+#fun graph showing connections between words
+set.seed(1234)
+tweet_word_pairs %>%
+  filter(n >= 12) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "#156760") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE, 
+                 point.padding = unit(0.2, "lines")) +
+  theme_void() +
+  ggtitle("Word Network - Arctic Data Center Tweets")
+```
+
+# Using tidy text to look for correlations within Arctic Data Center tweets
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+# Using tidy text to look for correlations within ADC tweets
+ADC_tweets <- tibble(id = tidy_tweets$created_at, 
+                         title = tidy_tweets$text)
+
+# View (ADC tweets)
+ADC_tweets <- ADC_tweets %>% 
+  unnest_tokens(word, title) %>% 
+  anti_join(stop_words)
+
+
+# We can use pairwise_count() from the widyr package to count how many times each pair of words occurs together in a title or description field.
+tweet_word_pairs <- ADC_tweets %>% 
+  pairwise_count(word, id, sort = TRUE, upper = FALSE)
+
+#fun graph showing connections between words
+set.seed(1234)
+tweet_word_pairs %>%
+  filter(n >= 12) %>%
+  graph_from_data_frame() %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n, edge_width = n), edge_colour = "#156760") +
+  geom_node_point(size = 5) +
+  geom_node_text(aes(label = name), repel = TRUE, 
+                 point.padding = unit(0.2, "lines")) +
+  theme_void() +
+  ggtitle("Word Network - Arctic Data Center Tweets")
+```
+
+#Showing the most frequently used hashtags
+```{r hashtags echo=FALSE, message=FALSE,warning=FALSE}
+ADC_tweets_organic$hashtags <- as.character(ADC_tweets_organic$hashtags)
+ADC_tweets_organic$hashtags <- gsub("c\\(", "", ADC_tweets_organic$hashtags)
+
+set.seed(1234)
+
+ADC_colors <- c(
+  `navy`="#1D244E",
+  `light blue`="#B3E1E7",
+  `green`="#19B369",
+  `light green`="#79FD81",
+  `teal`="#146660",
+  `dark teal`="#1B887E",
+  `grey`="#767171",
+  `black`="#000000")
+
+#ADC_color_pal <- c("#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#1D244E","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#B3E1E7","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#19B369","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#79FD81","#146660","#146660","#146660","#146660","#146660","#146660","#146660","#146660","#146660","#146660","#146660","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#1B887E","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171","#767171")
+wordcloud(ADC_tweets_organic$hashtags, min.freq=4, scale=c(3.5, .5), random.order=FALSE, rot.per=0.35, 
+          colors=ADC_colors)
+```
+Adding the code that I was playing with about the sentiment tracker here because I think it's cool but at the end of the day don't want it in the final report.
+
+Resources when you come back to this and can learn more about the sentiment tracker:
+https://cran.r-project.org/web/packages/syuzhet/vignettes/syuzhet-vignette.html
+https://towardsdatascience.com/real-time-sentiment-analysis-on-social-media-with-open-source-tools-f864ca239afe
+https://alphabold.com/sentiment-analysis-the-lexicon-based-approach/
+http://saifmohammad.com/WebPages/NRC-Emotion-Lexicon.htmx
+```{r year-sentiment-tracker, echo=FALSE, warning=FALSE,eval=FALSE}
+
+#2020 only
+ADC_2020text_tweets <- iconv(ADC_2020text_tweets, from="UTF-8", to="ASCII", sub="")
+ADC_2020sentiment<-get_nrc_sentiment((ADC_2020text_tweets),language="english")
+ADC_2020sentimentscores<-data.frame(colSums(ADC_2020sentiment[,]))
+names(ADC_2020sentimentscores) <- "Score"
+ADC_2020sentimentscores <- cbind("sentiment"=rownames(ADC_2020sentimentscores),ADC_2020sentimentscores)
+rownames(ADC_2020sentimentscores) <- NULL
+
+sapply(strsplit(ADC_2020text_tweets, " "), length)
+
+#2019 and before
+ADC_2019text_tweets <- iconv(ADC_2019text_tweets, from="UTF-8", to="ASCII", sub="")
+ADC_2019sentiment<-get_nrc_sentiment((ADC_2019text_tweets),language="english")
+ADC_2019sentimentscores<-data.frame(colSums(ADC_2019sentiment[,]))
+names(ADC_2019sentimentscores) <- "Score"
+ADC_2019sentimentscores <- cbind("sentiment"=rownames(ADC_2019sentimentscores),ADC_2019sentimentscores)
+rownames(ADC_2019sentimentscores) <- NULL
+
+#letting you know how many words are in the string
+sapply(strsplit(ADC_2019text_tweets, " "), length)
+
+#making full data frame
+stackedsentiment<-data.frame(year=rep(c("2020","2019 and before"), each=10),
+                             sentiment=rep(ADC_2019sentimentscores$sentiment,2),
+                             score=c(ADC_2020sentimentscores$Score, ADC_2019sentimentscores$Score))
+
+# sentiments by year
+sentimentyear_graph<-ggplot(data=stackedsentiment,aes(x=sentiment,y=score,fill=year))+
+  geom_bar(stat = "identity",color="black",position=position_dodge())+
+  xlab("Sentiments")+ylab("Scores")+
+  ggtitle("Total sentiment based on scores by year")+
+  scale_fill_manual(values=c("#1D244E","#B3E1E7"))
+
+sentimentyear_graph+theme_ADC()#+theme(legend.position="none")
+
+```
+
+
+
+```{r time-graph, echo=FALSE}
+
+
+#The get_nrc_sentiment function returns a data frame in which each row represents a sentence from the original file. It's treating all the words from our tweets like one sentence because that's how the character vector is stored. 
+
+# Next time you work on this, see if you can figure out a way to mine the tweets as sentences rather than as one string of words.
+
+angry_items <- which(ADC_sentiment$anger > 0)
+ADC_sentiment[angry_items]
+
+```

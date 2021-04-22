@@ -1,0 +1,277 @@
+\PassOptionsToPackage{unicode=true}{hyperref} % options for packages loaded elsewhere
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provides euro and other symbols
+\else % if luatex or xelatex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage[]{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\usepackage{hyperref}
+\hypersetup{
+            pdftitle={Website Analytics - Arctic Data Center},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs}
+% Fix footnotes in tables (requires footnote package)
+\IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{longtable}}{}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+% set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+
+\title{Website Analytics - Arctic Data Center}
+\author{}
+\date{\vspace{-2.5em}Last Updated May 2020}
+
+\begin{document}
+\maketitle
+
+\hypertarget{arctic-data-center-website-metrics}{%
+\subsection{Arctic Data Center Website
+Metrics}\label{arctic-data-center-website-metrics}}
+
+In addition to tracking Twitter metrics, I'm also interested in tracking
+traffic to arcticdata.io and different pages within that domain.
+
+\hypertarget{data-collection---summary}{%
+\section{Data Collection - Summary}\label{data-collection---summary}}
+
+I collected data manually from Google Analytics once a month near the
+first of each month and added it to the folder Website Metrics. This
+summary file contains:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{month}: month of Tweet information
+\item
+  \textbf{year}: year of Tweet information
+\item
+  \textbf{date}: formatted the month as the first day of the months o
+  that the date would format nicely for as.Date
+\item
+  \textbf{pubs\_view}: number of pageviews for the publications page -
+  \url{https://arcticdata.io/publications/}
+\item
+  \textbf{home\_view}: number of pageviews for the home page -
+  \url{https://arcticdata.io/}
+\item
+  \textbf{catalog\_view}: number of pageviews for the catalog page -
+  \url{https://arcticdata.io/catalog}
+\item
+  \textbf{catalogdata\_view}: number of pageviews for the catalog/data
+  page - \url{https://arcticdata.io/catalog/data}
+
+  \begin{itemize}
+  \tightlist
+  \item
+    This is the page that people are directed to when they go back to
+    the search from the Metacat site rather than the Wordpress site.
+  \end{itemize}
+\item
+  \textbf{data\_view}: number of pageviews for the data page
+
+  \begin{itemize}
+  \tightlist
+  \item
+    In October 2018, the catalog page was created - before that time,
+    the data page URL was \url{https://arcticdata.io/data}. On and
+    before October 2018, these are the pageviews for
+    \url{https://arcticdata.io/data}. On and after November 2018, this
+    variable is the sum of the catalog\_view and catalogdata\_view.
+  \end{itemize}
+\item
+  \textbf{submit\_view}: number of pageviews for the data submission
+  page - \url{https://arcticdata.io/catalog/submit}
+\item
+  \textbf{site\_view}: Number of pageviews for the entire arcticdata.io
+  domain.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    These are all the total pageview count for the associated pages,
+    which is a total count and doesn't exclude repeat visitors or Arctic
+    Data Center staff views.
+  \end{itemize}
+\end{itemize}
+
+\hypertarget{data-analysis}{%
+\subsection{Data Analysis}\label{data-analysis}}
+
+\begin{longtable}[]{@{}lrlrrrllrr@{}}
+\caption{Website Metrics Table}\tabularnewline
+\toprule
+Month & Year & Date & Pubs\_View & Site\_View & Home\_View &
+Catalog\_View & CatalogData\_View & Data\_View &
+Submit\_View\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Month & Year & Date & Pubs\_View & Site\_View & Home\_View &
+Catalog\_View & CatalogData\_View & Data\_View &
+Submit\_View\tabularnewline
+\midrule
+\endhead
+April & 2020 & 2020-04-01 & 48 & 9384 & 1105 & 599 & 653 & 1252 &
+73\tabularnewline
+March & 2020 & 2020-03-01 & 36 & 6400 & 847 & 401 & 570 & 971 &
+63\tabularnewline
+Februrary & 2020 & 2020-02-01 & 44 & 7172 & 935 & 497 & 590 & 1087 &
+73\tabularnewline
+January & 2020 & 2020-01-01 & 25 & 6863 & 876 & 427 & 565 & 992 &
+75\tabularnewline
+December & 2019 & 2019-12-01 & 19 & 4254 & 626 & 322 & 402 & 724 &
+56\tabularnewline
+November & 2019 & 2019-11-01 & 22 & 5852 & 842 & 368 & 506 & 874 &
+25\tabularnewline
+October & 2019 & 2019-10-01 & 28 & 5612 & 859 & 444 & 474 & 918 &
+57\tabularnewline
+September & 2019 & 2019-09-01 & 32 & 5458 & 742 & 333 & 496 & 829 &
+31\tabularnewline
+August & 2019 & 2019-08-01 & 22 & 6006 & 797 & 440 & 472 & 912 &
+33\tabularnewline
+July & 2019 & 2019-07-01 & 28 & 4390 & 690 & 458 & 446 & 904 &
+41\tabularnewline
+June & 2019 & 2019-06-01 & 24 & 4232 & 636 & 366 & 364 & 730 &
+34\tabularnewline
+May & 2019 & 2019-05-01 & 33 & 4559 & 571 & 397 & 417 & 814 &
+44\tabularnewline
+April & 2019 & 2019-04-01 & 29 & 5650 & 612 & 501 & 578 & 1079 &
+51\tabularnewline
+March & 2019 & 2019-03-01 & 34 & 5510 & 689 & 456 & 485 & 941 &
+63\tabularnewline
+February & 2019 & 2019-02-01 & 22 & 6510 & 734 & 527 & 570 & 1097 &
+49\tabularnewline
+January & 2019 & 2019-01-01 & 33 & 5297 & 690 & 465 & 560 & 1025 &
+33\tabularnewline
+December & 2018 & 2018-12-01 & 29 & 4284 & 874 & 349 & 386 & 735 &
+32\tabularnewline
+November & 2018 & 2018-11-01 & 38 & 8475 & 1839 & 387 & 473 & 860 &
+36\tabularnewline
+October & 2018 & 2018-10-01 & 21 & 7866 & 2344 & null & null & 798 &
+42\tabularnewline
+September & 2018 & 2018-09-01 & 33 & 7426 & 1980 & null & null & 618 &
+63\tabularnewline
+August & 2018 & 2018-08-01 & 29 & 9926 & 2727 & null & null & 715 &
+108\tabularnewline
+July & 2018 & 2018-07-01 & 19 & 10299 & 2266 & null & null & 773 &
+55\tabularnewline
+June & 2018 & 2018-06-01 & 20 & 11100 & 2294 & null & null & 758 &
+134\tabularnewline
+May & 2018 & 2018-05-01 & 16 & 14086 & 2882 & null & null & 805 &
+87\tabularnewline
+April & 2018 & 2018-04-01 & 38 & 12965 & 3411 & null & null & 946 &
+88\tabularnewline
+March & 2018 & 2018-03-01 & 23 & 14950 & 4277 & null & null & 1063 &
+49\tabularnewline
+February & 2018 & 2018-02-01 & 31 & 9823 & 2086 & null & null & 691 &
+49\tabularnewline
+January & 2018 & 2018-01-01 & 15 & 9606 & 2092 & null & null & 746 &
+60\tabularnewline
+December & 2017 & 2017-12-01 & 17 & 4865 & 1084 & null & null & 536 &
+36\tabularnewline
+November & 2017 & 2017-11-01 & 18 & 7958 & 1654 & null & null & 779 &
+64\tabularnewline
+October & 2017 & 2017-10-01 & 35 & 5237 & 1305 & null & null & 461 &
+58\tabularnewline
+September & 2017 & 2017-09-01 & 32 & 4978 & 1089 & null & null & 431 &
+16\tabularnewline
+August & 2017 & 2017-08-01 & 25 & 8527 & 1711 & null & null & 512 &
+64\tabularnewline
+July & 2017 & 2017-07-01 & 14 & 8093 & 1670 & null & null & 660 &
+51\tabularnewline
+June & 2017 & 2017-06-01 & 20 & 6612 & 1458 & null & null & 544 &
+70\tabularnewline
+May & 2017 & 2017-05-01 & 21 & 7544 & 1642 & null & null & 510 &
+76\tabularnewline
+April & 2017 & 2017-04-01 & 18 & 7221 & 1734 & null & null & 613 &
+73\tabularnewline
+March & 2017 & 2017-03-01 & 46 & 7768 & 2073 & null & null & 535 &
+84\tabularnewline
+February & 2017 & 2017-02-01 & 44 & 6590 & 1705 & null & null & 470 &
+90\tabularnewline
+January & 2017 & 2017-01-01 & 25 & 6195 & 1573 & null & null & 638 &
+105\tabularnewline
+December & 2016 & 2016-12-01 & 18 & 6056 & 1544 & null & null & 569 &
+44\tabularnewline
+November & 2016 & 2016-11-01 & 26 & 7080 & 1252 & null & null & 614 &
+38\tabularnewline
+October & 2016 & 2016-10-01 & 18 & 6848 & 630 & null & null & 502 &
+34\tabularnewline
+September & 2016 & 2016-09-01 & 14 & 6019 & 600 & null & null & 509 &
+10\tabularnewline
+August & 2016 & 2016-08-01 & 40 & 7824 & 899 & null & null & 508 &
+50\tabularnewline
+July & 2016 & 2016-07-01 & 45 & 5399 & 979 & null & null & 276 &
+44\tabularnewline
+June & 2016 & 2016-06-01 & 20 & 6625 & 762 & null & null & 476 &
+19\tabularnewline
+May & 2016 & 2016-05-01 & 27 & 4259 & 724 & null & null & 363 &
+33\tabularnewline
+April & 2016 & 2016-04-01 & 54 & 5195 & 1070 & null & null & 487 &
+34\tabularnewline
+March & 2016 & 2016-03-01 & 29 & 1924 & 480 & null & null & 49 &
+55\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{graphing-data}{%
+\subsection{Graphing Data}\label{graphing-data}}
+
+\includegraphics{website-analytics-ADC_files/figure-latex/monthly-views-1.pdf}
+
+\includegraphics{website-analytics-ADC_files/figure-latex/searcher-views-1.pdf}
+
+\includegraphics{website-analytics-ADC_files/figure-latex/submitters-1.pdf}
+
+\includegraphics{website-analytics-ADC_files/figure-latex/publications-1.pdf}
+
+\end{document}

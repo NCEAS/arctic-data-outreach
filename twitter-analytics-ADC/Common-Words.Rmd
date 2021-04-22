@@ -1,0 +1,118 @@
+---
+title: "Words to Remover"
+date: "Last Updated May 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, echo=FALSE,results=FALSE,message=FALSE}
+library(readr)
+library(tidyr)
+library(knitr)
+library(ggplot2)
+library(rtweet)
+library(dplyr)
+library(tidytext)
+library(kableExtra)
+library(formattable)
+library(data.table)
+library(dendroTools)
+library(cowplot)
+library(tm)
+library(tokenizers)
+```
+
+## Data Analysis - Tweet Level Info
+
+```{r twitter-data, echo=FALSE}
+ADC <- get_timeline("@realdonaldtrump", n= 3200)
+
+#Creating an organic tweet list
+#Remove retweets
+ADC_tweets_organic <- ADC[ADC$is_retweet==FALSE, ] 
+# Remove replies
+ADC_tweets_organic <- subset(ADC_tweets_organic, is.na(ADC_tweets_organic$reply_to_status_id)) 
+ADC_tweets_organic$created_at <-as.character.Date(ADC_tweets_organic$created_at) 
+ADC_tweets_organic$hashtags <-as.list(ADC_tweets_organic$hashtags) 
+
+#Keeping ONLY the retweets
+ADC_retweets <- ADC[ADC$is_retweet==TRUE, ] 
+
+#Keeping ONLY the replies
+ADC_replies <- subset(ADC, !is.na(ADC$reply_to_status_id))
+```
+
+
+## Anaylzing text of tweets
+
+```{r}
+#Remove retweets
+ADC_tweets_organic <- ADC[ADC$is_retweet==FALSE, ] 
+# Remove replies
+ADC_tweets_organic <- subset(ADC_tweets_organic, is.na(ADC_tweets_organic$reply_to_status_id)) 
+
+ADC_text_tweets <- ADC_tweets_organic %>%
+  select(text) %>%
+  unnest_tokens(word, text)
+
+#cleaning organic tweets of any characters we don't want to show in the analysis, like @ or links
+ADC_text_tweets$word <-  gsub("https\\S*", "", ADC_text_tweets$word)
+ADC_text_tweets$word <-  gsub("@\\S*", "", ADC_text_tweets$word) 
+ADC_text_tweets$word  <-  gsub("amp", "", ADC_text_tweets$word) 
+#ADC_text_tweets$word  <-  gsub("[\r\n]", "", ADC_text_tweets$word)
+#ADC_text_tweets$word  <-  gsub("[:digit:]", "", ADC_text_tweets$word)
+#ADC_text_tweets$word  <-  gsub("[:punct:]", "", ADC_text_tweets$word)
+
+#removing stop words from the text
+
+ADC_text_tweets<-as.data.frame(ADC_text_tweets,na.rm=TRUE)
+ADC_text_tweets$word<-as.character(ADC_text_tweets$word)
+
+all_stops <- as.data.frame(stopwords("en"))
+colnames(all_stops)<- c("word")
+all_stops$word<-as.character(all_stops$word)
+
+ADC_text_tweets_cleaned <-ADC_text_tweets[!ADC_text_tweets$word%in%all_stops$word,]
+
+ADC_text_tweets_cleaned<-as.data.frame(table(ADC_text_tweets_cleaned))
+head(ADC_text_tweets_cleaned)
+
+ADC_text_tweets_cleaned <- ADC_text_tweets_cleaned %>% arrange(-Freq)
+kable(ADC_text_tweets_cleaned)
+```
+
+
+### Understanding the sentiment of tweet content
+No one likes a Twitter account that only spreads angry or sad tweets. Capturing the tone of your tweets and how they balance out is a good indication of your account’s performance.
+
+```{r sentiment-tracker, echo=FALSE, warning=FALSE}
+
+#all tweets
+# Converting tweets to ASCII to trackle strange characters
+ADC_text_tweets <- iconv(ADC_text_tweets, from="UTF-8", to="ASCII", sub="")
+
+#ADC_text_tweets_cleaned<-as.vector(ADC_text_tweets_cleaned["ADC_text_tweets_cleaned"],mode = "character")
+
+ADC_sentiment<-get_nrc_sentiment((ADC_text_tweets),language="english")
+ADC_sentimentscores<-data.frame(colSums(ADC_sentiment[,]))
+
+names(ADC_sentimentscores) <- "Score"
+
+ADC_sentimentscores <- cbind("sentiment"=rownames(ADC_sentimentscores),ADC_sentimentscores)
+rownames(ADC_sentimentscores) <- NULL
+
+#all sentiments
+sentiment_graph<-ggplot(data=ADC_sentimentscores,aes(x=sentiment,y=Score))+
+  geom_bar(aes(fill=sentiment),stat = "identity",color="black",position=position_dodge())+
+  xlab("Sentiments")+ylab("Scores")+
+  ggtitle("Total sentiment based on scores @RealDonaldTrump")+
+  scale_fill_manual(values=c("#1D244E","#B3E1E7","dark grey","#19B369","#79FD81","#767171","#146660","#000000","light grey","#1B887E"))
+
+sentiment_graph+theme_ADC()+theme(legend.position="none")
+```
+```
+
+
