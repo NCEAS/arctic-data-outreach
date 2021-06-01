@@ -1,0 +1,245 @@
+---
+title: "Other-Accounts"
+author: "Erin McLean"
+date: "11/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#This is for accounts where you do NOT have login access.
+```
+
+```{r load-packages, echo=FALSE,results=FALSE,message=FALSE}
+library(readr)
+library(tidyr)
+library(knitr)
+library(ggplot2)
+library(syuzhet)
+library(rtweet)
+library(dplyr)
+library(tidytext)
+library(kableExtra)
+library(ggraph)
+library(formattable)
+library(data.table)
+library(dendroTools)
+library(cowplot)
+library(tm)
+library(tokenizers)
+library(tidyverse)
+library(wordcloud)
+library(SnowballC)
+library(RColorBrewer)
+library(wordcloud2)
+library(widyr)
+library(igraph)
+library(topicmodels)
+library(DataCombine)
+library(ggThemeAssist)
+library(quanteda)
+library(data.table)
+library(lubridate)
+library(textclean)
+library(gridExtra)
+library(grid)
+library(lattice)
+library(gtable)
+library(ggpubr)
+```
+
+```{r other-account-analysis, echo=FALSE,results=FALSE,warning=FALSE, message=FALSE}
+#establishing twitter api token
+#add to your R environment
+tw_token <-
+rtweet::create_token(
+   app =  Sys.getenv('app'),
+   consumer_key = Sys.getenv('consumer_key'),
+   consumer_secret = Sys.getenv('consumer_secret'),
+   access_token = Sys.getenv('access_token'),
+   access_secret = Sys.getenv('access_secret'),
+  set_renv = TRUE
+)
+
+influentialtwitter <- function(account_name, n){
+    df <- get_timeline(account_name, n = n, token = tw_token)
+    df <- select(df, screen_name, created_at, reply_to_status_id,
+                 reply_to_screen_name,is_retweet, favorite_count, retweet_count, 
+                 media_type, mentions_screen_name,followers_count)
+    return(df) #always goes at the end of the function
+}
+accounts<-c("@NASAEarthData","@sciencegateways","@yeshancqcq","@arcticdatactr","@CUAHSI" , "@kbene","@opendap","@USGS_CDI", "@hsu000001", "@WHOI", "@EDIgotdata", "@obrienmobb", "@lstanish", "@GarretsonAlexis", "@twilamoon","@nsidc","@MGDSdata","@gmrt_bathy" ,"@drthevic" ,"@scdiggs","@MarshallXMa","@michael_ts0","@frankatsea","@NCAR_ACOM","@umbc","@sjskhalsa","@DataONEorg","@macromicropaleo","@tandfenviro","@smrariz","@NCAR_Science","@m_cragin","@ndlibraries","@NEON_sci","@nkmeyers","@ESSDIVE","@NCAR_CISL","@NCAR_RDA","@amckennafoster","@jensensunny","@DougSchuster3","@metamattj","@sjeanetteclark")
+
+accounts<-sort(accounts)
+
+#careful - if you have accounts that have 0 tweets, this will not run
+
+result_list <- lapply(accounts, influentialtwitter, n = 3200)
+result_all <- do.call(bind_rows, result_list)
+```
+
+```{r cleaning-columns-date-text, echo=FALSE,results=FALSE,message=FALSE}
+
+#getting rid of any HTML symbols so I don't have things like &amp; in the text of the tweets
+#removed the text column so this line is no longer needed - add back in if you want to analyze the text as well
+#result_all$text <-replace_html(result_all$text,symbol=TRUE)
+
+#creating two columns Date AND Time rather than "created at" so that I can subset by Hour or Month
+result_all$posdate <- as.POSIXct(result_all$created_at,format="%Y:%m:%d %H:%M:%S")
+result_all$posdate <- with_tz(result_all$posdate, tzone = "America/Los_Angeles")
+result_all$Time <- format(as.POSIXct(result_all$posdate,format="%Y:%m:%d %H:%M:%S"),"%H:%M:%S")
+result_all$Date <- format(as.POSIXct(result_all$posdate,format="%Y:%m:%d %H:%M:%S"),"%Y:%m:%d")
+result_all$Hour<-format(strptime(result_all$Time,"%H:%M:%S"),'%H')
+result_all$MonthYr<-format(strptime(result_all$Date,"%Y:%m:%d"),'%Y:%m')
+result_all$weekday<-wday(as.Date(result_all$Date,"%Y:%m:%d"), label=TRUE)
+```
+
+```{r cleaning-data-organic, echo=FALSE,results=FALSE,message=FALSE,eval=TRUE}
+
+#Remove retweets
+all_tweets_organic <- result_all[result_all$is_retweet==FALSE, ] 
+#Removing that one Sunday tweet
+#ADC_tweets_organic <- ADC_tweets_organic[ADC_tweets_organic$weekday!="Sun", ] 
+# Remove replies
+all_tweets_organic <- subset(all_tweets_organic, is.na(all_tweets_organic$reply_to_status_id)) 
+
+#formatting changes for the date and for the list of hashtags
+all_tweets_organic$created_at <-as.character.Date(all_tweets_organic$created_at) 
+#all_tweets_organic$hashtags <- lapply(all_tweets_organic$hashtags, paste0, collapse = ", ")
+#formatting the variable media type so that I can group by it later on
+#all_tweets_organic$media_type <-unlist(all_tweets_organic$media_type,use.names = T)
+
+#Keeping ONLY the retweets
+all_retweets <- result_all[result_all$is_retweet==TRUE, ] 
+
+#Keeping ONLY the replies
+all_replies <- subset(result_all, !is.na(result_all$reply_to_status_id))
+
+```
+
+```{r total-mean-favorites, echo=FALSE,results=FALSE,warning=FALSE, message=FALSE}
+#trying to normalize data by number of tweets
+allcount_tweets<-result_all %>%  
+  group_by(screen_name) %>%
+  summarize(n = n())
+
+allcount_fav<-result_all %>%  
+  group_by(screen_name) %>%
+  summarize(fav_sum = sum(favorite_count,na.rm=TRUE))
+
+allcount_rt<-result_all %>%  
+  group_by(screen_name) %>%
+  summarize(rt_sum = sum(retweet_count,na.rm=TRUE))
+
+allcount_tweets$fav_sum<-allcount_fav$fav_sum
+allcount_tweets$rt_sum<-allcount_rt$rt_sum
+
+allcount_tweets$normalfav<-(allcount_tweets$fav_sum/allcount_tweets$n)
+allcount_tweets$normalrt<-(allcount_tweets$rt_sum/allcount_tweets$n)
+
+#you'll run into problems if someone has zero likes and zero RTs on any of their tweets since slice_max won't find a max if they're all zero.
+
+
+count_tweetssortedfav <- allcount_tweets %>%
+  group_by(screen_name) %>% 
+  slice_max(order_by = normalfav, n = 3)
+
+count_tweetssortedrt <- allcount_tweets %>%
+  group_by(screen_name) %>% 
+  slice_max(order_by = normalrt, n = 3)
+```
+
+
+```{r time-of-day, echo=FALSE,results=FALSE,warning=FALSE, message=FALSE}
+#trying to normalize data by number of tweets
+count_tweets<-all_tweets_organic %>%  
+  group_by(screen_name,Hour) %>%
+  summarize(n = n())
+
+count_fav<-all_tweets_organic %>%  
+  group_by(screen_name,Hour) %>%
+  summarize(fav_sum = sum(favorite_count,na.rm=TRUE))
+
+count_rt<-all_tweets_organic %>%  
+  group_by(screen_name,Hour) %>%
+  summarize(rt_sum = sum(retweet_count,na.rm=TRUE))
+
+count_tweets$fav_sum<-count_fav$fav_sum
+count_tweets$rt_sum<-count_rt$rt_sum
+
+count_tweets$normalfav<-(count_tweets$fav_sum/count_tweets$n)
+count_tweets$normalrt<-(count_tweets$rt_sum/count_tweets$n)
+
+count_tweetssortedfav <- count_tweets %>%
+  group_by(screen_name) %>% 
+  slice_max(order_by = normalfav, n = 1)
+
+count_tweetssortedrt <- count_tweets %>%
+  group_by(screen_name) %>% 
+  slice_max(order_by = normalrt, n = 1)
+
+count_tweetssortedrt1 <- count_tweetssortedrt[1:41,]
+count_tweetssortedrt2 <- count_tweetssortedrt[43:44,]
+
+count_tweetssortedrt<-rbind(count_tweetssortedrt1,count_tweetssortedrt2)
+
+count_tweetssortedfavrt<-data.frame(
+  screen_name=count_tweetssortedfav$screen_name,
+  fav_hour=count_tweetssortedfav$Hour,
+  rt_hour=count_tweetssortedrt$Hour)
+```
+
+```{r day-of-week, echo=FALSE,results=FALSE,warning=FALSE,message=FALSE}
+#trying to normalize data by number of tweets
+count_tweetswk<-all_tweets_organic %>%  
+  group_by(screen_name,weekday) %>%
+  summarize(n = n())
+
+count_favwk<-all_tweets_organic %>%   
+  group_by(screen_name,weekday) %>%
+  summarize(fav_sum = sum(favorite_count,na.rm=TRUE))
+
+count_rtwk<-all_tweets_organic %>%  
+  group_by(screen_name,weekday) %>%
+  summarize(rt_sum = sum(retweet_count,na.rm=TRUE))
+
+count_tweetswk$fav_sum<-count_favwk$fav_sum
+count_tweetswk$rt_sum<-count_rtwk$rt_sum
+
+count_tweetswk$normalfav<-(count_tweetswk$fav_sum/count_tweetswk$n)
+count_tweetswk$normalrt<-(count_tweetswk$rt_sum/count_tweetswk$n)
+
+count_tweetswksortedfav <- count_tweetswk %>%
+  group_by(screen_name) %>% 
+  slice_max(order_by = normalfav, n = 1)
+
+count_tweetswksortedrt <- count_tweetswk %>%
+  group_by(screen_name) %>% 
+  slice_max(order_by = normalrt, n = 1)
+
+count_tweetswksortedfavrt<-data.frame(
+  screen_name=count_tweetswksortedfav$screen_name,
+  fav_day=count_tweetswksortedfav$weekday,
+  rt_day=count_tweetswksortedrt$weekday)
+```
+
+```{r df-export, echo=FALSE,results=FALSE,warning=FALSE,message=FALSE}
+#grabbing number of followers
+followers<-all_tweets_organic %>%  
+  group_by(screen_name) %>% 
+  summarize(followers = mean(followers_count))
+
+results_df <- data.frame(account_name = accounts,
+                 followers = followers$followers,
+                 number_tweets = allcount_tweets$n,
+                 mean_favorites_per_tweet=allcount_tweets$normalfav,
+                 mean_retweets_per_tweet=allcount_tweets$normalrt,
+                 best_time_fav=count_tweetssortedfavrt$fav_hour,
+                 best_time_rt=count_tweetssortedfavrt$rt_hour,
+                 best_day_fav=count_tweetswksortedfavrt$fav_day,
+                 best_rt_fav=count_tweetswksortedfavrt$rt_day
+                 )
+
+write.csv(results_df,"DHD_tweet_analysis.csv", row.names = FALSE)
+```
