@@ -51,11 +51,12 @@ library(ggpubr)
 This report contains information about DataONE's Twitter account, @DataONEorg, and how effective it is at engaging a wider audience of data repository professionals, researchers, students, and other data organizations.
 
 ```{r manually-gathered-data, echo=FALSE,results=FALSE,message=FALSE}
-twitter_summary_metrics <- read_csv("~/Documents/Twitter Analytics/Raw Dataone/twitter-summary-metrics-d1.csv")
+twitter_summary_metrics <- read_csv("./Raw Dataone/twitter-summary-metrics-d1.csv")
 twitter_summary_metrics %>% 
     mutate(Number_Followers = na_if(Number_Followers, "null"))
 twitter_summary_metrics$Date <-as.Date(twitter_summary_metrics$Date) 
 ```
+
 ```{r downloaded-scraped-data, echo=FALSE,results=FALSE,message=FALSE}
 
 #establishing twitter api token
@@ -82,7 +83,7 @@ ADC_raw <- select(ADC_raw, status_id, created_at, text, display_text_width, repl
 
 #Joining rtweet data to downloaded twitter data
 
-files <- list.files("~/Documents/Twitter Analytics/Raw Dataone/",pattern="tweet_activity_metrics_DataONEorg_",full.names=TRUE)
+files <- list.files("./Raw Dataone/",pattern="tweet_activity_metrics_DataONEorg_",full.names=TRUE)
 ADC_downloaded <- lapply(files, read.csv, stringsAsFactors = F)
 ADC_downloaded_merge <- do.call(rbind, ADC_downloaded) %>% 
   select(Tweet.id, impressions, engagements, engagement.rate, replies, user.profile.clicks, url.clicks,
@@ -116,7 +117,7 @@ monthlytweets <- ADC %>%
   group_by(MonthYr) %>%
   summarize(n = n())
 
-#monthlytweetsimp <- ADC %>%  
+monthlytweetsimp <- ADC %>%  
   group_by(MonthYr) %>%
   summarize(impressions_sum = sum(impressions,na.rm=TRUE))
 
@@ -225,26 +226,28 @@ These first two graphs illustrate the number of organic Tweets each month (that 
 The DataONE account currently has `r twitter_summary_metrics$Number_Followers[1]` followers.  
 
 ```{r monthly-tweets, echo=FALSE,results=FALSE,message=FALSE, warning=FALSE}
-monthlytweets<-ggplot(data = bymonth, aes(x=date, y=n)) +
+monthlytweets <- ggplot(data = bymonth, aes(x=date, y=n)) +
   geom_point(color="#1B887E",size=2.5)+
   labs(title='Number of Monthly Tweets',
        x="Date",
        y="Number of Tweets")+
-    stat_smooth(method="lm", se=FALSE, color="#B3E1E7",size=1)
+  stat_smooth(method="lm", se=FALSE, color="#B3E1E7",size=1)
 
-monthlytweets<-monthlytweets+theme_ADC()
+monthlytweets <- monthlytweets+theme_ADC()
 ```
+
 ```{r followers, echo=FALSE}
-followers<-ggplot(data = twitter_summary_metrics, aes(x=Date, y=New_Followers)) +
+followers <- ggplot(data = twitter_summary_metrics, aes(x=Date, y=New_Followers)) +
   geom_point(color="#1B887E",size=2.5)+
   labs(title='Followers Gained Each Month',
        x="Date",
        y="Followers Gained")+
     stat_smooth(method="lm", se=FALSE, color="#B3E1E7",size=1)
 
-followers<-followers+theme_ADC()
+followers <- followers+theme_ADC()
 
 ```
+
 ```{r basic-graphs, echo=FALSE, warning=FALSE}
 plot_grid(monthlytweets,followers,
           ncol=2)

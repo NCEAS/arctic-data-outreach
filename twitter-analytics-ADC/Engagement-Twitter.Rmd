@@ -51,11 +51,12 @@ library(ggpubr)
 This report contains information about the Arctic Data Center's Twitter account, @ArcticDataCtr, and how effective it is at engaging a wider audience of Arctic researchers, students, and other data organizations.
 
 ```{r manually-gathered-data, echo=FALSE,results=FALSE,message=FALSE}
-twitter_summary_metrics <- read_csv("~/Documents/Twitter Analytics/Raw Data/twitter-summary-metrics.csv")
+twitter_summary_metrics <- read_csv("./data/twitter-summary-metrics.csv")
 twitter_summary_metrics %>% 
     mutate(Number_Followers = na_if(Number_Followers, "null"))
-twitter_summary_metrics$Date <-as.Date(twitter_summary_metrics$Date) 
+twitter_summary_metrics$Date <- as.Date(twitter_summary_metrics$Date) 
 ```
+
 ```{r downloaded-scraped-data, echo=FALSE,results=FALSE,message=FALSE}
 
 #establishing twitter api token
@@ -78,11 +79,11 @@ ADC_raw <- select(ADC_raw, status_id, created_at, text, display_text_width, repl
 
 #If you want to export the tweet timeline as a .csv, run the following commented lines of code.
 #ADC <- apply(ADC,2,as.character)
-#write.csv(ADC,"/Users/mclean/Downloads/ADC-Tweet-Data.csv", row.names = FALSE)
+#write.csv(ADC,"./output/ADC-Tweet-Data.csv", row.names = FALSE)
 
 #Joining rtweet data to downloaded twitter data
 
-files <- list.files("~/Documents/Twitter Analytics/Raw Data/Monthly/",pattern="twitter-metrics-",full.names=TRUE)
+files <- list.files("./Monthly/",pattern="twitter-metrics-",full.names=TRUE)
 ADC_downloaded <- lapply(files, read.csv, stringsAsFactors = F)
 ADC_downloaded_merge <- do.call(rbind, ADC_downloaded) %>% 
   select(Tweet.id, impressions, engagements, engagement.rate, replies, user.profile.clicks, url.clicks,
@@ -121,9 +122,8 @@ monthlytweetsimp <- ADC %>%
   group_by(MonthYr) %>%
   summarize(impressions_sum = sum(impressions,na.rm=TRUE))
 
-setwd("~/Documents/Twitter Analytics/Raw Data/")
-write.csv(monthlytweetsimp,file='imp_tweet_count.csv')
-write.csv(monthlytweets,file='tweet_count.csv')
+write.csv(monthlytweetsimp,file='./output/imp_tweet_count.csv')
+write.csv(monthlytweets,file='./output/tweet_count.csv')
 ```
 
 ```{r cleaning-data-organic, echo=FALSE,results=FALSE,message=FALSE,eval=TRUE}
@@ -233,6 +233,7 @@ monthlytweets<-ggplot(data = bymonth, aes(x=date, y=n)) +
 
 monthlytweets<-monthlytweets+theme_ADC()
 ```
+
 ```{r followers, echo=FALSE}
 followers<-ggplot(data = twitter_summary_metrics, aes(x=Date, y=New_Followers)) +
   geom_point(color="#1B887E",size=2.5)+
@@ -244,6 +245,7 @@ followers<-ggplot(data = twitter_summary_metrics, aes(x=Date, y=New_Followers)) 
 followers<-followers+theme_ADC()
 
 ```
+
 ```{r basic-graphs, echo=FALSE}
 plot_grid(monthlytweets,followers,
           ncol=2)
@@ -657,7 +659,7 @@ plot_grid(photo_engagements,normal_photo_engagements, photo_impressions, normal_
 With the power of Google Analytics, we can see how users of arcticdata.io are interacting with the site - where they arrived from and what they do when they're there. 
 
 ```{r website-data-clean, echo=FALSE,results=FALSE,warning=FALSE,message=FALSE}
-website_summary_metrics <- read_csv("~/Documents/Twitter Analytics/Raw Data/website_summary_metrics.csv")
+website_summary_metrics <- read_csv("./data/website_summary_metrics.csv")
 website_summary_metrics$Date <-as.Date(website_summary_metrics$Date) 
 
 website_summary_metrics$Pub_Percent<-(website_summary_metrics$Pubs_View/website_summary_metrics$Site_View)*100

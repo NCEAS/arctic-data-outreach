@@ -1,5 +1,5 @@
 ---
-title: "Twitter Analytics - Arctic Data Centert"
+title: "Twitter Analytics - Arctic Data Center"
 date: "Last updated June 2020"
 output: html_document
 ---
@@ -85,7 +85,7 @@ library(textclean)
 ```
 
 ```{r raw-data, echo=FALSE,results=FALSE,message=FALSE}
-twitter_summary_metrics <- read_csv("~/Documents/Twitter Analytics/Raw Data/twitter-summary-metrics.csv")
+twitter_summary_metrics <- read_csv("./data/twitter-summary-metrics.csv")
 twitter_summary_metrics$Date <-as.Date(twitter_summary_metrics$Date) 
 ```
 
@@ -170,7 +170,7 @@ plot_grid(monthlytweets,followers,impressions,tweetimpressions,
 ```{r twitter-data, echo=FALSE}
 ADC <- get_timeline("@ArcticDataCtr", n= 3200)
 
-#write.csv(ADC,"/Users/mclean/Downloads/ADC-Tweet-Data.csv", row.names = FALSE)
+#write.csv(ADC,"./output/ADC-Tweet-Data.csv", row.names = FALSE)
 ```
 
 ```{r twitter-clean, echo=FALSE}
